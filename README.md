@@ -105,30 +105,19 @@ npm run build
 
 ```text
 
-┌─────────────────────────────────────────────────────────┐
-│                    HEADER (Fixo)                        │
-│         [ Home ] [ Ranking ] [ Regras ]         │
-└───────────────────────────┬─────────────────────────────┘
-                            │
-                            ▼
-┌─────────────────────────────────────────────────────────┐
-│                 HERO / LANDING PAGE                     │
-│  - Fundo dinâmico (Estádio Noturno + Linhas Animadas)   │
-│  - Elementos flutuantes (Animação da Bola + Jogador)   │
-│  - Subtítulo interativo com efeito Underline Neon       │
-└───────────────────────────┬─────────────────────────────┘
-                            │
-                            ▼
-┌─────────────────────────────────────────────────────────┐
-│                     CARDS GRID                          │
-│     [ Card: Regulamento ]      [ Card: Ranking ]        │
-│  - Efeito Hover 3D (Scale + Text Shadow + Box Shadow)   │
-└───────────────────────────┬─────────────────────────────┘
-                            │
-                            ▼
-┌─────────────────────────────────────────────────────────┐
-│                    FOOTER (Relativo)                    │
-│   [ Ícones Sociais (Esquerda) ]  [ Créditos (Direita) ] │
-└─────────────────────────────────────────────────────────┘
+📌 **[1] HEADER (Fixo no Topo)**
+└─ Links de ancoragem rápidos: `Home` | `Ranking` | `Regras`
+   ▼
+⚽ **[2] HERO / LANDING PAGE**
+└─ Fundo dinâmico (Estádio Noturno + Linhas de campo animadas)
+└─ Elementos interativos: Animação da bola, jogador e subtítulo neon
+   ▼
+🃏 **[3] SEÇÃO DE CONTEÚDO (Cards Grid)**
+└─ Exibição dos módulos centrais em Grid responsivo
+└─ `Card Regulamento` & `Card Ranking` com efeitos hover 3D
+   ▼
+👣 **[4] FOOTER (Rodapé Relativo)**
+└─ Canto Esquerdo: Redes Sociais (GitHub / LinkedIn)
+└─ Canto Direito: Créditos de desenvolvimento
 
 ```
