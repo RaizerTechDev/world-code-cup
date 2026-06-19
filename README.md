@@ -105,23 +105,31 @@ npm run build
 
 ```text
 
-HEADER
-  Logo + Menu + Botão de alternância 🌞/🌙
-    ▼
-HERO / LANDING
-  Fundo animado + slogan + CTA
-    ▼
-SEÇÃO DE PROGRAMAÇÃO
-  Cards de eventos + animações
-    ▼
-EXPERIÊNCIAS EXCLUSIVAS
-  Combos, sorteios, ambientação
-    ▼
-AGENDA INTERATIVA
-  Calendário + integração Google/Outlook
-    ▼
-FOOTER
-  Links úteis + redes sociais + contato
-
+┌─────────────────────────────────────────────────────────┐
+│                    HEADER (Fixo)                        │
+│             [ Home ]   [ Ranking
+[ Regras ]         │
+└───────────────────────────┬─────────────────────────────┘
+                            │
+                            ▼
+┌─────────────────────────────────────────────────────────┐
+│                 HERO / LANDING PAGE                     │
+│  - Fundo dinâmico (Estádio Noturno + Linhas Animadas)   │
+│  - Elementos flutuantes (Animação da Bola + Jogador)   │
+│  - Subtítulo interativo com efeito Underline Neon       │
+└───────────────────────────┬─────────────────────────────┘
+                            │
+                            ▼
+┌─────────────────────────────────────────────────────────┐
+│                     CARDS GRID                          │
+│     [ Card: Regulamento ]      [ Card: Ranking ]        │
+│  - Efeito Hover 3D (Scale + Text Shadow + Box Shadow)   │
+└───────────────────────────┬─────────────────────────────┘
+                            │
+                            ▼
+┌─────────────────────────────────────────────────────────┐
+│                    FOOTER (Relativo)                    │
+│   [ Ícones Sociais (Esquerda) ]  [ Créditos (Direita) ] │
+└─────────────────────────────────────────────────────────┘
 
 ```
