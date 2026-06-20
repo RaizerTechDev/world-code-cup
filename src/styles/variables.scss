@@ -1,0 +1,31 @@
+// Paleta base
+$green-field: #0b6623;
+$white-line: #ffffff;
+$dark-green: #145a32;
+$dark-bg: #121212;
+$dark-text: #ffffff;
+$neon-blue: #00e5ff;
+$neon-golden:#ffea00;
+
+
+// Tipografia
+$font-main: 'Inter', sans-serif;
+
+// Breakpoints em rem
+$mobile: 30rem;   // ~480px
+$tablet: 48rem;   // ~768px
+$laptop: 64rem;   // ~1024px
+
+// Responsividade mixin
+@mixin responsive($device) {
+  @if $device == mobile {
+    @media (max-width: $mobile) { @content; }
+  }
+  @if $device == tablet {
+    @media (max-width: $tablet) { @content; }
+  }
+  @if $device == laptop {
+    @media (max-width: $laptop) { @content; }
+  }
+}
+
