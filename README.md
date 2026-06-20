@@ -47,7 +47,6 @@
 src/
 ├── index.jsx
 ├── App.jsx
-├── App.scss
 ├── /components
 │   ├── Header/
 │   │   ├── Header.jsx
@@ -80,6 +79,7 @@ npm install -D sass-embedded
 
 ```bash
 npm install react react-dom
+npm install react-router-dom
 ```
 
 ### 3. 🚀 Como rodar o projeto
