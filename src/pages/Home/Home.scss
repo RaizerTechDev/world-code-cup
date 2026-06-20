@@ -1,0 +1,351 @@
+@use "../../styles/variables.scss" as *;
+
+.home {
+  // ... mantenha suas propriedades iniciais iguais
+  background-image: url("../../assets/stadium-night.jpg");
+  background-size: cover;
+  background-position: center;
+  color: $white-line;
+
+  // 🔧 Segurança da Fase 2: Impede estritamente o scroll horizontal das linhas/bola
+  overflow-x: hidden;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 2rem;
+  padding-top: 18rem;
+
+  @include responsive(tablet) {
+    background-position: center top;
+    background-size: 125% 100.1%; // Dá um leve zoom para as arquibancadas abraçarem a tela vertical do iPad
+    background-repeat: no-repeat;
+    padding-top: 0;
+  }
+
+  // 📱 breakpoint para Celulares (como o do seu print de 399px)
+  @include responsive(mobile) {
+    background-position: center 0%;
+    background-size: 125% 100.1%;
+    background-repeat: no-repeat;
+  }
+
+  .home__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.15);
+    z-index: 1;
+  }
+  
+  .home__content {
+    z-index: 2;
+    text-align: center;
+    max-width: 1200px;
+    width: 100%;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    margin-top: 25vh;
+
+    // 📱 Ajuste Mobile/Tablet: Reduz o empurrão do topo para o texto não sumir da tela
+    @include responsive(tablet) {
+      margin-top: 12vh;
+    }
+  }
+
+  // Estilos para audio
+  .audio-control {
+    position: fixed;
+    bottom: 4rem; // Fica um pouco acima do seu Footer compacto no mobile
+    right: 2rem;
+    z-index: 150; // Fica acima do conteúdo, mas abaixo de modais/menus
+    background: rgba(0, 13, 15, 0.8);
+    border: 0.1rem solid $neon-blue;
+    color: $neon-blue;
+    padding: 0.6rem 1rem;
+    font-size: 0.8rem;
+    font-weight: bold;
+    border-radius: 0.4rem;
+    cursor: pointer;
+    backdrop-filter: blur(4px);
+    transition: all 0.3s ease;
+    box-shadow: 0 0 1rem rgba(0, 229, 255, 0.1);
+
+    &:hover {
+      background: $neon-blue;
+      color: #000;
+      box-shadow: 0 0 1.5rem rgba(0, 229, 255, 0.4);
+    }
+
+    &.playing {
+      border-color: #00e676; // Muda para verde neon se estiver tocando
+      color: #00e676;
+
+      &:hover {
+        background: #00e676;
+        color: #000;
+        box-shadow: 0 0 1.5rem rgba(0, 230, 118, 0.4);
+      }
+    }
+
+    @include responsive(mobile) {
+      bottom: 5.5rem; // Sobe um pouquinho mais no celular para não cobrir o texto do footer
+      right: 1rem;
+      font-size: 0.75rem;
+      padding: 0.5rem 0.8rem;
+    }
+  }
+  
+  // Linhas animadas no campo
+  
+  .line-field {
+    position: absolute;
+    width: 100%;
+    height: 0.2rem;
+    background: $white-line;
+    z-index: 2; // Fica acima do overlay mas abaixo dos cards se eles passarem por cima
+    pointer-events: none;
+    
+    // Deixei a sua animação clássica de correr horizontalmente
+    animation: moveLines 6s linear infinite;
+  }
+
+  // 🔧 Trava a linha de cima exatamente cortando o topo do letreiro do fundo
+  .line-top {
+    top: 21%;
+
+    @include responsive(tablet) {
+      top: 21%;
+    }
+    @include responsive(mobile) {
+      top: 25%;
+    }
+  }
+
+  // 🔧 Trava a linha de baixo colada na base do letreiro/cards
+  .line-bottom {
+    top: 64%; // Usando top fixo para seguir a proporção da imagem perfeitamente
+
+    @include responsive(tablet) {
+      top: 48%;
+    }
+    @include responsive(mobile) {
+      top: 60%;
+    }
+  }
+
+// Mantém o keyframe clássico que arrasta as linhas que você já usava
+@keyframes moveLines {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+ 
+  // Estrelas no fundo
+  .stars {
+    position: absolute;
+    inset: 0; // Garante que cobre o fundo inteiro
+    background: transparent;
+    z-index: 0;
+    pointer-events: none;
+
+    &::before,
+    &::after {
+      content: "✨✨✨✨✨";
+      position: absolute;
+      top: 27%;
+      left: 10%;
+      font-size: 1.2rem;
+      color: #fff;
+      opacity: 0.7;
+      animation: twinkle 3s infinite alternate;
+    }
+
+    &::after {
+      top: 60%;
+      left: 70%;
+      font-size: 1rem;
+      opacity: 0.5;
+    }
+
+    // 📱 Se você quiser apenas ajustar a posição delas ou sumir com um bloco no mobile para não poluir:
+    @include responsive(tablet) {
+      &::after {
+        display: none; // Esconde o segundo bloco de estrelas em telas menores para evitar repetição excessiva
+      }
+      &::before {
+        top: 10%; // Sobe o bloco principal para ficar perto do topo no tablet/celular
+        left: 5%;
+      }
+    }
+
+    @include responsive(mobile) {
+      &::before {
+        top: 19%; // Ajuste fino específico para a tela do celular
+        font-size: 1rem; // Estrelas um pouco menores para combinar com o smartphone
+        right: 5%;
+      }
+    }
+  }
+
+  @keyframes twinkle {
+    0% {
+      opacity: 0.3;
+      transform: scale(0.9);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+  }
+
+  // GIF d// 🔧 GIF da bola vindo da direita travada na altura ideal acima do Regulamento
+  .ball-gif {
+    position: absolute;
+    top: 12rem;
+    width: 6rem;
+    height: 6rem;
+    background: url("https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExaXVnM3Fxa3N1cGZmcXE1Nm5jb2xqcDVrbWR1dW1ibGRkMjJuMnN3YyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/5t7ZjPj6xH7fhO1YPn/giphy.gif")
+      no-repeat center/cover;
+    animation: moveBall 10s linear infinite;
+    z-index: 3;
+
+    @include responsive(tablet) {
+      top: 34rem; // Move a bola para cima do subtítulo no mobile, livrando os cards
+      width: 4.5rem; // Diminui o tamanho para telas pequenas
+      height: 4.5rem;
+    }
+
+     @include responsive(mobile) {
+      top: 31rem; // Move a bola para cima do subtítulo no mobile, livrando os cards
+      width: 4.5rem; // Diminui o tamanho para telas pequenas
+      height: 4.5rem;
+    }
+  }
+
+  @keyframes moveBall {
+    0% {
+      left: 100%;
+    }
+    100% {
+      left: -10rem;
+    }
+  }
+
+  // GIF do jogador acima da bola
+  .player-gif {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 8rem;
+    height: 8rem;
+    background: url("https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExc2dhdXlqMHoxMjExb3BiNnhyN2Z5eXhubmdkYXE1NnUwYWxxbGs2ZiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/oCxFrTnjF4pdFFEUzS/giphy.gif")
+      no-repeat center/cover;
+    z-index: 4;
+
+    @include responsive(tablet) {
+      top: 8rem; // Sobe o jogador para a linha do menu, limpando o meio da tela
+      right: 5%;
+      width: 6rem; // Proporcional para celular
+      height: 6rem;
+    }
+
+     @include responsive(mobile) {
+      top: 8rem; // Sobe o jogador para a linha do menu, limpando o meio da tela
+      right: 0;
+      width: 6rem; // Proporcional para celular
+      height: 6rem;
+    }
+    
+  }
+
+  // Cards grid responsivo
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+    width: 100%;
+    max-width: 900px;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+
+    // 📱 Centraliza os cards no mobile quando eles quebrarem em uma coluna só
+    @include responsive(tablet) {
+      grid-template-columns: 1fr; // Fica em uma coluna
+    max-width: 24rem;           // 🔧 Diminui a largura máxima do bloco de cards
+    margin-top: 18rem;           // 🔧 Reduzido de 18rem para os cards não sumirem da tela
+    padding: 0 1rem;
+    }
+
+    // 📱 Centraliza os cards no mobile quando eles quebrarem em uma coluna só
+    @include responsive(mobile) {
+      grid-template-columns: 1fr;
+      padding: 0;
+      margin-top: 18rem;
+    }
+  }
+}
+
+// Subtítulo com efeito
+.fade-subtitle {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  font-size: 1.9rem;
+  color: $white-line;
+  margin-bottom: 3rem; // 🔧 espaço extra antes dos cards
+
+  @include responsive(tablet) {
+    font-size: 1.7rem; // Diminui a fonte do texto para não estourar a tela do celular
+    margin-top: 0; // Dá espaço para os GIFs trabalharem
+  }
+
+  @include responsive(mobile) {
+    font-size: 1rem;
+    margin-top:-1rem;
+  }
+
+  &:hover {
+    color: #ffffff;
+    text-shadow: 0 0 0.5rem rgba(255, 255, 255, 0.8);
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -0.3rem;
+    width: 0%;
+    height: 0.2rem;
+    background: #00e5ff;
+    transition: width 0.4s ease;
+  }
+
+  &:hover::after {
+    width: 100%;
+  }
+}
+
+// Cards com fade
+.fade-cards {
+  opacity: 0;
+  animation: fadeInUp 1.2s ease forwards;
+  animation-delay: 2.5s;
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(2rem);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }  
+}
+
+

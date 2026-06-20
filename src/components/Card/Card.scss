@@ -1,0 +1,44 @@
+@use '../../styles/variables.scss' as *;
+
+.card {
+  background: rgba(0, 0, 0, 0.6);
+  border: 0.2rem solid $neon-blue;
+  border-radius: 0.8rem;
+  padding: 2rem;
+  text-align: center;
+  color: #e0f7fa;
+  box-shadow: 0 0 1rem rgba(255, 255, 255, 0.4); // 🔧 sombra suave já ativa
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+
+  &__title {
+    font-size: 1.6rem;
+    margin-bottom: 0.8rem;
+    font-weight: bold;
+    color: #ffffff; // 🔧 título já branco neon
+    text-shadow: 0 0 0.8rem #ffffff;
+  }
+
+  &__description {
+    font-size: 1.2rem;
+    color: #b3e5fc;
+    text-shadow: 0 0 0.5rem #80d8ff;
+  }
+
+  &:hover {
+    transform: translateY(-0.5rem) scale(1.05);
+    box-shadow: 0 0 2rem #ffffff; // 🔧 sombra mais forte no hover
+    border-color: #ffffff;
+
+    .card__title,
+    .card__description {
+      color: #ffffff;
+      text-shadow: 0 0 1rem #ffffff;
+    }
+  }
+
+  @include responsive(mobile) {
+    padding: 1.5rem;
+    &__title { font-size: 1.4rem; }
+    &__description { font-size: 1rem; }
+  }
+}

@@ -1,0 +1,86 @@
+@use '../../styles/variables.scss' as *;
+
+.footer {
+  // 🔧 Seu degradê neon escuro da Fase 2 (corrigido para RGBA)
+  background: linear-gradient(0deg, rgba(0, 13, 15, 0.95) 0%, rgba(0, 30, 45, 0.8) 100%);
+  backdrop-filter: blur(12px); 
+  -webkit-backdrop-filter: blur(12px);
+  
+  color: #80d8ff;
+  padding: 1.2rem 2rem; // Respiro ideal para desktop
+  width: 100%;
+  max-width: 100vw; 
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+  border-top: 0.2rem solid $neon-blue;
+  box-shadow: 0 -0.4rem 2rem rgba(0, 229, 255, 0.15); // Brilho neon na base
+  position: relative; 
+  margin-top: auto;
+  box-sizing: border-box; 
+  overflow: hidden;
+  
+  .footer__socials {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: flex-start;
+
+    a {
+      color: $neon-blue;
+      font-size: 1.4rem;
+      transition: color 0.3s ease, transform 0.3s ease;
+
+      &:hover {
+        color: #ffffff;
+        transform: scale(1.2);
+        text-shadow: 0 0 1rem #ffffff;
+      }
+    }
+  }
+
+  .footer__text {
+    font-size: 1.2rem;
+    color: #b3e5fc;
+    text-align: right;
+    flex-shrink: 0;    
+  }
+
+  // 📱 Otimização para Tablets / iPads
+  @include responsive(tablet) {
+    padding: 1rem 1.5rem; // Diminui o recuo nas bordas
+
+    .footer__socials {
+      gap: 1.2rem;
+      a { font-size: 1.3rem; }
+    }
+
+    .footer__text {
+      font-size: 1.1rem;
+    }
+  }
+
+  // 📱 Otimização para Celulares (como o de 399px)
+  @include responsive(mobile) {
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.5rem 0.8rem;
+    text-align: center;
+
+    .footer__socials {
+      justify-content: center; // Centraliza os ícones perfeitamente
+      margin-left: 0;          // 🔧 Zera a margem que puxava para a esquerda
+      gap: 1.2rem;
+
+      a {
+        font-size: 1.2rem; // Mantém um tamanho bom para o clique no dedo
+      }
+    }
+
+    .footer__text {
+      text-align: center;      // Centraliza o texto
+      margin-right: 0;         // 🔧 Zera a margem que puxava para a direita
+      font-size: 1rem;
+      width: 100%;
+    }
+  }
+}

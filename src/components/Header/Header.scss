@@ -1,0 +1,156 @@
+// src/components/Header/Header.scss
+@use '../../styles/variables.scss' as *;
+
+.header {
+  background: linear-gradient(0deg, rgba(0, 13, 15, 0.95) 0%, rgba(0, 30, 45, 0.8) 100%);
+  backdrop-filter: blur(12px); 
+  -webkit-backdrop-filter: blur(12px);
+  
+  color: #80d8ff;  
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  
+  // 🔧 Borda neon com sombra brilhante para destacar o topo do campo
+  border-bottom: 0.2rem solid $neon-blue; 
+  box-shadow: 0 0.4rem 2rem rgba(0, 229, 255, 0.15);
+
+
+  .header__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1.2rem 2rem; // Aumentado levemente para respirar
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .audio-control {
+     background: linear-gradient(0deg, rgba(0, 13, 15, 0.95) 0%, rgba(0, 30, 45, 0.8) 100%);
+  backdrop-filter: blur(12px); 
+  -webkit-backdrop-filter: blur(12px);
+    border: 0.1rem solid $neon-blue;   // Borda azul neon
+    color: $neon-blue;      // Texto azul neon
+    padding: 0.5rem 0.5rem;
+    font-size: 0.8rem;
+    font-weight: bold;
+    border-radius: 0.4rem;
+
+    cursor: pointer;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    transition: all 0.3s ease;
+    box-shadow: 0 0 1rem rgba(0, 229, 255, 0.2);
+    
+    // Alinhamento fino para ele ficar bonito ao lado do menu ou logo
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      background: $neon-blue;
+      color: #000000;
+      box-shadow: 0 0 1.5rem rgba(0, 229, 255, 0.5);
+    }
+
+    &.playing {
+      border-color: $white-line;
+      color: $neon-golden;
+
+      &:hover {
+        background: $white-line;
+        color: #000000;
+        box-shadow: 0 0 1.5rem rgba(0, 230, 118, 0.5);
+      }
+    }
+
+    // Ajuste fino para telas menores / Mobile
+    @include responsive(mobile) {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.7rem;
+    }
+  }
+
+  .header__logo {
+    color: #ffffff;
+    font-size: 1.6rem;
+    font-weight: 800;
+    text-decoration: none;
+    text-shadow: 0 0 0.8rem $neon-blue;
+    span { color: $neon-blue; }
+  }
+
+  .header__nav ul {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+
+    li a {
+      color: $neon-blue;
+      font-size: 1.2rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: color 0.3s ease, text-shadow 0.3s ease;
+
+      // Efeito de brilho ao passar o mouse
+      &:hover, &:focus {
+        color: #ffffff;
+        text-shadow: 0 0 1rem #ffffff;
+        outline: none;
+      }
+    }
+  }
+    // Garantindo que o header fique acima de outros elementos, especialmente o campo
+  .header__toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 2rem;
+    height: 1.5rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+
+    .bar {
+      width: 100%;
+      height: 0.2rem;
+      background-color: $neon-blue;
+      transition: all 0.3s ease;
+    }
+
+    // Animação do toggle para transformar as barras em um "X"
+    &.is-active {
+      .bar:nth-child(1) { transform: translateY(0.65rem) rotate(45deg); }
+      .bar:nth-child(2) { opacity: 0; }
+      .bar:nth-child(3) { transform: translateY(-0.65rem) rotate(-45deg); }
+    }
+  }
+
+  @include responsive(tablet) {
+    .header__toggle { display: flex; }
+
+    .header__nav {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      // Fundo mobile acompanhando o padrão futurista
+      background: rgba(10, 10, 10, 0.98);
+      border-bottom: 0.2rem solid $neon-blue;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease-in-out;
+
+      &--open { max-height: 20rem; }
+
+      ul {
+        flex-direction: column;
+        align-items: center;
+        padding: 2rem 0;
+        gap: 1.5rem;
+      }
+    }
+  }
+}
