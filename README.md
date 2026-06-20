@@ -1,43 +1,42 @@
-# World Code Cup! ⚽💻
+ # World Code Cup! ⚽💻
 
 ## 📖 Documentação da Experiência Temática - Copa do Mundo
 
-## Fase 1
-
 ### 🎯 Objetivos
-- **Clareza**: apresentar a programação de forma simples e organizada.  
+
+- **Clareza**: apresentar regulamento e ranking de forma simples e organizada.  
+
 - **Atratividade**: usar elementos visuais e interativos que remetam ao clima da Copa.  
-- **Engajamento**: incentivar o visitante a explorar mais e participar das experiências.  
+
+- **Engajamento**: incentivar o visitante a explorar mais e acompanhar a competição.  
 
 ### 💡 Proposta de Experiência Digital
-1. **Landing Page temática**  
-   - Fundo animado estilo estádio ou campo de futebol.  
-   - Destaque para o slogan da campanha.  
-   - Botão de chamada para ação: “Conheça nossa programação”.
 
-2. **Seção de Programação Especial**  
-   - Cards com cada evento (telão para jogos, promoções, shows temáticos).  
-   - Ícones visuais (bola, torcida, bandeiras) para reforçar o clima.  
-   - Animações de entrada em sequência para dar dinamismo.
+1. **Landing Page temática**  
+   - Fundo animado estilo estádio noturno.  
+   - Destaque para o slogan da campanha.  
+   - Elementos visuais como bola e notebook reforçando o tema.
+
+2. **Seção de Regulamento e Ranking**  
+   - Cards neon com informações claras e acessíveis.  
+   - Regulamento da competição.  
+   - Ranking atualizado dos participantes.  
+   - Hover interativo para destacar cada card.
 
 3. **Experiências exclusivas**  
-   - Destaque para ações diferenciadas: combos temáticos, sorteios, ambientação especial.  
-   - Uso de hover interativo para revelar detalhes extras.
+   - Ambientação temática com gifs de bola e jogador.  
+   - Estrelas e linhas animadas no campo para dar dinamismo.  
 
-4. **Agenda interativa**  
-   - Calendário integrado mostrando dias e horários dos jogos e eventos.  
-   - Opção de adicionar ao calendário pessoal (Google/Outlook).
-
-5. **Dark/Light Mode com ambientação**  
-   - **Light Mode**: raios de sol e atmosfera de dia de jogo.  
-   - **Dark Mode**: estrelas e clima de noite de estádio.  
-   - Transição suave entre os modos, reforçando a imersão.
+4. **Footer informativo**  
+   - Links para GitHub e LinkedIn.  
+   - Créditos do projeto.  
+   - Rolagem junto com o conteúdo (não fixo).
 
 ### 🖼️ Resultado Esperado
 - O visitante acessa a página e imediatamente sente o **clima da Copa**.  
-- A programação é apresentada de forma clara e visualmente atraente.  
+- Regulamento e ranking são apresentados de forma clara e visualmente atraente.  
 - As animações e interatividade despertam interesse e incentivam a exploração.  
-- O modo dia/noite reforça a ambientação e torna a experiência memorável.  
+- O rodapé traz informações úteis sem atrapalhar a navegação.
 
 ---
 
@@ -106,23 +105,19 @@ npm run build
 
 ```text
 
-HEADER
-  Logo + Menu + Botão de alternância 🌞/🌙
-    ▼
-HERO / LANDING
-  Fundo animado + slogan + CTA
-    ▼
-SEÇÃO DE PROGRAMAÇÃO
-  Cards de eventos + animações
-    ▼
-EXPERIÊNCIAS EXCLUSIVAS
-  Combos, sorteios, ambientação
-    ▼
-AGENDA INTERATIVA
-  Calendário + integração Google/Outlook
-    ▼
-FOOTER
-  Links úteis + redes sociais + contato
-
+📌 **[1] HEADER (Fixo no Topo)**
+└─ Links de ancoragem rápidos: `Home` | `Ranking` | `Regras`
+   ▼
+⚽ **[2] HERO / LANDING PAGE**
+└─ Fundo dinâmico (Estádio Noturno + Linhas de campo animadas)
+└─ Elementos interativos: Animação da bola, jogador e subtítulo neon
+   ▼
+🃏 **[3] SEÇÃO DE CONTEÚDO (Cards Grid)**
+└─ Exibição dos módulos centrais em Grid responsivo
+└─ `Card Regulamento` & `Card Ranking` com efeitos hover 3D
+   ▼
+👣 **[4] FOOTER (Rodapé Relativo)**
+└─ Canto Esquerdo: Redes Sociais (GitHub / LinkedIn)
+└─ Canto Direito: Créditos de desenvolvimento
 
 ```
