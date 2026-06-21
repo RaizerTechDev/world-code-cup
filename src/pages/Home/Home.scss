@@ -19,7 +19,7 @@
 
   @include responsive(tablet) {
     background-position: center top;
-    background-size: 125% 100.1%; // Dá um leve zoom para as arquibancadas abraçarem a tela vertical do iPad
+    background-size: 125% 100.1%; 
     background-repeat: no-repeat;
     padding-top: 0;
   }
@@ -48,11 +48,15 @@
     flex-direction: column;
     align-items: center;
     position: relative;
-    margin-top: 25vh;
+    margin-top: 28vh;
 
     // 📱 Ajuste Mobile/Tablet: Reduz o empurrão do topo para o texto não sumir da tela
     @include responsive(tablet) {
-      margin-top: 12vh;
+      margin-top: 14vh;
+    }
+
+    @include responsive(mobile) {
+      margin-top: 1rem; // Proporção para S20, iPhone 12Pro e A16
     }
   }
 
@@ -100,40 +104,38 @@
   }
   
   // Linhas animadas no campo
-  
+
   .line-field {
     position: absolute;
     width: 100%;
     height: 0.2rem;
     background: $white-line;
-    z-index: 2; // Fica acima do overlay mas abaixo dos cards se eles passarem por cima
+    z-index: 2;
     pointer-events: none;
-    
-    // Deixei a sua animação clássica de correr horizontalmente
     animation: moveLines 6s linear infinite;
   }
 
-  // 🔧 Trava a linha de cima exatamente cortando o topo do letreiro do fundo
+  // 🔧 Trava a linha de cima baseada no centro da tela (50vh), ignorando se a tela é muito alta
   .line-top {
-    top: 21%;
+    top: calc(50vh - 11.2rem); 
 
     @include responsive(tablet) {
-      top: 21%;
+      top: calc(50vh - 17rem); // Ajuste fino para a altura do iPad Mini
     }
     @include responsive(mobile) {
-      top: 25%;
+      top: calc(50vh - 14rem); // Ajuste fixo para a proporção dos celulares informados
     }
   }
 
-  // 🔧 Trava a linha de baixo colada na base do letreiro/cards
+  // 🔧 Trava a linha de baixo acompanhando a mesma lógica
   .line-bottom {
-    top: 64%; // Usando top fixo para seguir a proporção da imagem perfeitamente
+    top: calc(50vh + 6rem); 
 
     @include responsive(tablet) {
-      top: 48%;
+      top: calc(50vh + 0rem);
     }
     @include responsive(mobile) {
-      top: 60%;
+      top: calc(50vh + 0rem);
     }
   }
 
@@ -164,8 +166,8 @@
     }
 
     &::after {
-      top: 60%;
-      left: 70%;
+      top: 68%;
+      left: 75%;
       font-size: 1rem;
       opacity: 0.5;
     }
@@ -183,7 +185,7 @@
 
     @include responsive(mobile) {
       &::before {
-        top: 19%; // Ajuste fino específico para a tela do celular
+        top: 18%; // Ajuste fino específico para a tela do celular
         font-size: 1rem; // Estrelas um pouco menores para combinar com o smartphone
         right: 5%;
       }
@@ -213,14 +215,14 @@
     z-index: 3;
 
     @include responsive(tablet) {
-      top: 34rem; // Move a bola para cima do subtítulo no mobile, livrando os cards
-      width: 4.5rem; // Diminui o tamanho para telas pequenas
+      top: 33rem; 
+      width: 4.5rem; 
       height: 4.5rem;
     }
 
      @include responsive(mobile) {
-      top: 31rem; // Move a bola para cima do subtítulo no mobile, livrando os cards
-      width: 4.5rem; // Diminui o tamanho para telas pequenas
+      top: 38rem; 
+      width: 4.5rem; 
       height: 4.5rem;
     }
   }
@@ -253,12 +255,11 @@
     }
 
      @include responsive(mobile) {
-      top: 8rem; // Sobe o jogador para a linha do menu, limpando o meio da tela
+      top: 13rem; // Sobe o jogador para a linha do menu, limpando o meio da tela
       right: 0;
       width: 6rem; // Proporcional para celular
       height: 6rem;
-    }
-    
+    }    
   }
 
   // Cards grid responsivo
@@ -285,7 +286,7 @@
     @include responsive(mobile) {
       grid-template-columns: 1fr;
       padding: 0;
-      margin-top: 18rem;
+      margin-top: 22rem;
     }
   }
 }
@@ -302,11 +303,14 @@
   @include responsive(tablet) {
     font-size: 1.7rem; // Diminui a fonte do texto para não estourar a tela do celular
     margin-top: 0; // Dá espaço para os GIFs trabalharem
+    margin-bottom: 2rem;
   }
 
   @include responsive(mobile) {
-    font-size: 1rem;
-    margin-top:-1rem;
+    font-size: 1.1rem;      // Tamanho ideal para leitura no celular sem quebrar linha
+    margin-top: 4rem;     // 🔧 MARGEM POSITIVA: Empurra o texto para baixo dos GIFs, fazendo ele aparecer!
+    margin-bottom: 1.5rem;  // Espaço controlado entre o subtítulo e o topo dos Cards
+    padding: 0 1rem;        // Segurança para o texto não colar nas bordas físicas do celular
   }
 
   &:hover {
