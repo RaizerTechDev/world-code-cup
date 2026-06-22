@@ -1,123 +1,181 @@
- # World Code Cup! ⚽💻
+# World Code Cup! ⚽💻
 
-## 📖 Documentação da Experiência Temática - Copa do Mundo
+![Banner](https://capsule-render.vercel.app/api?type=waving&color=0:0f4c5c,100:1b9aaa&height=200&section=header&text=World%20Code%20Cup&fontSize=38&fontColor=ffffff&animation=fadeIn&fontAlignY=35&desc=Frontend%20Case%20%7C%20UI%20Imersiva%20Gamificada&descAlignY=55&descSize=16)
 
-### 🎯 Objetivos
 
-- **Clareza**: apresentar regulamento e ranking de forma simples e organizada.  
+<p align="center">
+  🚀 <a href="https://world-code-cup.vercel.app/" target="_blank"><b>Acessar experiência ao vivo</b></a>
+</p>
 
-- **Atratividade**: usar elementos visuais e interativos que remetam ao clima da Copa.  
-
-- **Engajamento**: incentivar o visitante a explorar mais e acompanhar a competição.  
-
-### 💡 Proposta de Experiência Digital
-
-1. **Landing Page temática**  
-   - Fundo animado estilo estádio noturno.  
-   - Destaque para o slogan da campanha.  
-   - Elementos visuais como bola e notebook reforçando o tema.
-
-2. **Seção de Regulamento e Ranking**  
-   - Cards neon com informações claras e acessíveis.  
-   - Regulamento da competição.  
-   - Ranking atualizado dos participantes.  
-   - Hover interativo para destacar cada card.
-
-3. **Experiências exclusivas**  
-   - Ambientação temática com gifs de bola e jogador.  
-   - Estrelas e linhas animadas no campo para dar dinamismo.  
-
-4. **Footer informativo**  
-   - Links para GitHub e LinkedIn.  
-   - Créditos do projeto.  
-   - Rolagem junto com o conteúdo (não fixo).
-
-### 🖼️ Resultado Esperado
-- O visitante acessa a página e imediatamente sente o **clima da Copa**.  
-- Regulamento e ranking são apresentados de forma clara e visualmente atraente.  
-- As animações e interatividade despertam interesse e incentivam a exploração.  
-- O rodapé traz informações úteis sem atrapalhar a navegação.
+<p align="center">
+  <img src="https://img.shields.io/badge/Status-Production%20UI-0f4c5c?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Frontend-React-1b9aaa?style=for-the-badge&logo=react&logoColor=white" />
+  <img src="https://img.shields.io/badge/SCSS-CC6699?style=for-the-badge&logo=sass&logoColor=white" alt="Sass">
+  <img src="https://img.shields.io/badge/Deploy-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" />
+</p>
 
 ---
 
-## 📂 Estrutura de Pastas
+## 🎬 Primeira impressão (o que o projeto entrega)
+
+<img src="./public/outros/world-code-cup-video-readme.gif" alt="World Code Cup" width="800">
+
+---
+
+## 🧭 O que é este projeto
+
+O **World Code Cup** é uma experiência interativa gamificada inspirada na Copa do Mundo, criada para transformar conteúdo informativo em uma **interface imersiva, visual e explorável**.
+
+O objetivo não é apenas exibir informações, mas criar uma sensação de **produto real com narrativa visual e interação contínua**.
+
+---
+## 🧭 Problema
+
+Interfaces tradicionais desse tipo sofrem com:
+
+- leitura passiva
+- baixa retenção de atenção
+- pouca interação
+- ausência de identidade visual forte
+
+👉 Resultado: o usuário consome, mas não explora.
+
+---
+
+## 💡 Solução
+
+O projeto foi construído com foco em **experiência e narrativa visual**, aplicando:
+
+### 🎮 Gamificação
+Interface inspirada em competição esportiva com sensação de progressão.
+
+### 🎨 Direção visual
+- Estádio noturno como base
+- Neon e contraste como identidade
+- Elementos animados para imersão
+
+### 🧩 Estrutura de componentes
+Componentes reutilizáveis e organização escalável.
+
+---
+
+## 🧠 Decisões técnicas
+
+- React para UI componentizada
+- Vite para build rápido e moderno
+- SCSS para organização de estilos
+- Estrutura simples e escalável
+- Foco em legibilidade e manutenção
+
+---
+
+## ⚙️ Arquitetura
 
 ```text
 src/
-├── index.jsx
-├── App.jsx
-├── /components
+├── components/
 │   ├── Header/
-│   │   ├── Header.jsx
-│   │   └── Header.scss
 │   ├── Footer/
-│   │   ├── Footer.jsx
-│   │   └── Footer.scss
 │   └── Card/
-│       ├── Card.jsx
-│       └── Card.scss
-├── /pages
+├── pages/
 │   └── Home/
-│       ├── Home.jsx
-│       └── Home.scss
-└── /styles
-    ├── global.scss
-    └── variables.scss
-
-## 📦 Dependências instaladas
-
-### 1. Desenvolvimento
-
-```bash
-npm install -D vite
-npm install -D @vitejs/plugin-react
-npm install -D sass-embedded
+├── styles/
+│   ├── global.scss
+│   └── variables.scss
+└── App.jsx
 ```
 
-### 2. Produção
+---
+
+## ⚠️ Desafios enfrentados
+
+🎯 Equilíbrio visual
+- Manter estética forte sem prejudicar leitura.
+
+🎬 Controle de animações
+- Garantir fluidez sem poluição visual.
+
+🧭 Fluxo de experiência
+- Construir navegação como jornada e não como página estática.
+
+---
+
+## ⚡ Como rodar localmente
 
 ```bash
-npm install react react-dom
-npm install react-router-dom
-```
+git clone https://github.com/SEU_USUARIO/world-code-cup.git
 
-### 3. 🚀 Como rodar o projeto
+cd world-code-cup
 
-#### Instalar dependências
+npm install
 
-```bash
-npm install 
-```
-
-#### Rodar servidor de 
-
-```bash
 npm run dev
 ```
 
-#### Build para produção
+---
 
-```bash
-npm run build
-```
+## 🗂️ Fluxo de Navegação
 
-## 🗂️ Fluxo de Navegação - Fase 1
+- Header → navegação e acesso rápido às seções
+- Home→ impacto visual imediato com identidade temática
+- Conteúdo → cards interativos (regulamento e ranking)
+- Footer → encerramento leve com links e créditos
 
-```text
+---
 
-📌 **[1] HEADER (Fixo no Topo)**
-└─ Links de ancoragem rápidos: `Home` | `Ranking` | `Regras`
-   ▼
-⚽ **[2] HERO / LANDING PAGE**
-└─ Fundo dinâmico (Estádio Noturno + Linhas de campo animadas)
-└─ Elementos interativos: Animação da bola, jogador e subtítulo neon
-   ▼
-🃏 **[3] SEÇÃO DE CONTEÚDO (Cards Grid)**
-└─ Exibição dos módulos centrais em Grid responsivo
-└─ `Card Regulamento` & `Card Ranking` com efeitos hover 3D
-   ▼
-👣 **[4] FOOTER (Rodapé Relativo)**
-└─ Canto Esquerdo: Redes Sociais (GitHub / LinkedIn)
-└─ Canto Direito: Créditos de desenvolvimento
+## 🧰 Stack
+- React
 
-```
+- Vite
+
+- JavaScript
+
+- SCSS
+
+- Vercel
+
+---
+
+## 🏁 Resultado
+
+- Interface imersiva e consistente
+- Experiência visual forte e memorável
+- Estrutura clara e escalável
+- Sensação de produto real
+
+---
+
+## 🔗 Acesso
+
+👉 https://world-code-cup.vercel.app/
+
+<br>
+
+### Licença
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+
+---
+
+</br> 
+
+## 👨‍💻 Autor
+
+<table>
+<tr>
+  <td align="center">
+    <img src="https://avatars.githubusercontent.com/u/87991807?v=4" width="80" />
+  </td>
+  <td>
+    **RafaRaizer-Dev** <br>
+    <a href="https://api.whatsapp.com/send/?phone=47999327137">📱 WhatsApp</a> | 
+    <a href="https://www.linkedin.com/in/raizer-rafael/">💼 LinkedIn</a> | 
+    <a href="https://github.com/RaizerTechDev">🐱 GitHub</a> | 
+    <a href="https://raizertechdev-portfolio.netlify.app/">🌐 Portfólio</a>
+  </td>
+</tr>
+</table>
+
+<br>
+
+<div align="center">
