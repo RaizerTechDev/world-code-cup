@@ -18,7 +18,7 @@
 
 ## 🎬 Primeira impressão (o que o projeto entrega)
 
-<img src="./public/outros/world-code-cup-video-readme.gif" alt="World Code Cup" width="800">
+<img src="https://raw.githubusercontent.com/RaizerTechDev/world-code-cup/main/public/outros/world-code-cup-video-readme.gif" alt="World Code Cup" width="800">
 
 ---
 
