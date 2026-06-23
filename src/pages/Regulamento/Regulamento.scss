@@ -1,0 +1,208 @@
+@use '../../styles/variables.scss' as *;
+
+.regulamento-page {
+  min-height: 100vh;
+  width: 100%;
+  padding: 8rem 2rem 4rem 2rem;
+  // Fundo com radial gradiente baseado na cor dark trazida da imagem
+  background: radial-gradient(circle at top, $cyber-blue-dark 0%, #000407 100%);
+  display: flex;
+  justify-content: center;
+  box-sizing: border-box;
+
+  @include responsive(mobile) {
+    padding: 6rem 1rem 2rem 1rem;
+  }
+}
+
+.regulamento-container {
+  width: 100%;
+  max-width: 950px;
+  display: flex;
+  flex-direction: column;
+  gap: 3.5rem;
+}
+
+// PLACAR DO ESTÁDIO (Efeito da moldura azul superior)
+.stadium-scoreboard {
+  text-align: center;
+  background: linear-gradient(180deg, rgba($cyber-blue-glow, 0.08) 0%, rgba(0, 0, 0, 0.6) 100%);
+  border: 2px solid $cyber-blue-glow;
+  box-shadow: 0 0 2rem rgba($cyber-blue-glow, 0.2), inset 0 0 1rem rgba($cyber-blue-glow, 0.1);
+  border-radius: 12px;
+  padding: 3.5rem 2rem 2.5rem 2rem;
+  position: relative;
+
+  .live-badge {
+    position: absolute;
+    top: -0.9rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #e61d43; // Vermelho fosco idêntico ao topo da imagem
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: bold;
+    padding: 0.4rem 1.8rem;
+    border-radius: 6px;
+    letter-spacing: 0.15rem;
+    box-shadow: 0 0 1rem rgba(#e61d43, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  h1 {
+    font-size: 3.5rem;
+    font-weight: 900;
+    letter-spacing: 0.15rem;
+    color: #ffffff;
+    text-shadow: 0 0 1.2rem rgba($cyber-blue-glow, 0.8);
+    margin-bottom: 0.5rem;
+
+    @include responsive(mobile) { 
+      font-size: 2rem;
+      letter-spacing: 0.05rem;
+    }
+  }
+
+  .neon-text-golden {
+    color: $gold-glow;
+    font-weight: bold;
+    letter-spacing: 0.2rem;
+    text-shadow: 0 0 0.8rem rgba($gold-glow, 0.6);
+    font-size: 1.3rem;
+
+    @include responsive(mobile) {
+      font-size: 1rem;
+    }
+  }
+}
+
+// GRID DO PÓDIO (Efeito 1º, 2º e 3º lugares chanfrados)
+.podium-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr 1fr;
+  align-items: flex-end;
+  gap: 2rem;
+
+  @include responsive(tablet) {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+.podium-card {
+  background: $bg-gradient-center;
+  border-radius: 8px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  position: relative;
+  backdrop-filter: blur(8px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-0.3rem);
+  }
+
+  h3 { 
+    font-size: 1.3rem; 
+    margin-bottom: 1rem; 
+    color: #fff;
+    font-weight: bold;
+  }
+  
+  .reward-title { font-weight: bold; font-size: 1.1rem; margin-bottom: 0.4rem; color: #ffffff; }
+  .reward-sub { font-size: 0.9rem; color: rgba(255, 255, 255, 0.6); }
+
+  // 🥈 Configuração do Segundo Lugar
+  &.silver {
+    border: 2px solid rgba(162, 182, 199, 0.4);
+    box-shadow: 0 0 1.5rem rgba(162, 182, 199, 0.1);
+  }
+
+  // 🏆 Configuração Premium do Primeiro Lugar Ouro
+  &.gold {
+    border: 2px solid $gold-glow;
+    box-shadow: 0 0 2.5rem rgba($gold-glow, 0.25), inset 0 0 1rem rgba($gold-glow, 0.1);
+    background: linear-gradient(180deg, rgba($gold-dark, 0.6) 0%, rgba(0, 0, 0, 0.8) 100%);
+    padding-top: 3.5rem;
+    padding-bottom: 3.5rem;
+
+    @include responsive(tablet) { 
+      padding-top: 2rem; 
+      padding-bottom: 2rem;
+      order: -1; // Joga o ouro para o topo na lista do celular
+    }
+
+    h3 {
+      color: $gold-glow;
+      text-shadow: 0 0 0.8rem rgba($gold-glow, 0.5);
+    }
+  }
+
+  // 🥉 Configuração do Terceiro Lugar
+  &.bronze {
+    border: 2px solid rgba(224, 130, 68, 0.4);
+    box-shadow: 0 0 1.5rem rgba(224, 130, 68, 0.1);
+  }
+}
+
+// ITEMS DA LISTA DE REGRAS (Visual idêntico aos blocos horizontais da imagem)
+.rules-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.rule-item {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  background: linear-gradient(90deg, rgba($cyber-blue-glow, 0.08) 0%, rgba(0, 0, 0, 0.5) 100%);
+  padding: 1.5rem 2rem;
+  border-radius: 8px;
+  border: 1px solid rgba($cyber-blue-glow, 0.15);
+  border-left: 6px solid $cyber-blue-glow;
+  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.4), inset 0 0 1rem rgba($cyber-blue-glow, 0.03);
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-left-color: $gold-glow;
+    box-shadow: 0 0 1.5rem rgba($cyber-blue-glow, 0.25);
+    transform: scale(1.01);
+  }
+
+  @include responsive(mobile) {
+    flex-direction: row;
+    gap: 1.2rem;
+    padding: 1.2rem 1rem;
+  }
+
+  .rule-number {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: $cyber-blue-glow;
+    text-shadow: 0 0 1rem rgba($cyber-blue-glow, 0.6);
+    font-family: 'Orbitron', sans-serif, monospace; // Estilo digital/gamer
+    min-width: 3.5rem;
+  }
+
+  h4 { 
+    color: #fff; 
+    margin-bottom: 0.2rem; 
+    font-size: 1.3rem; 
+    font-weight: bold;
+
+    @include responsive(mobile) {
+      font-size: 1.1rem;
+    }
+  }
+  
+  p { 
+    color: rgba(255, 255, 255, 0.75); 
+    font-size: 1rem; 
+    line-height: 1.4;
+
+    @include responsive(mobile) {
+      font-size: 0.85rem;
+    }
+  }
+}

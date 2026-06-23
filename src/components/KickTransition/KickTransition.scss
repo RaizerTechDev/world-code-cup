@@ -1,0 +1,28 @@
+.kick-transition {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 4, 7, 0.85); /* Fundo escuro puxando pro tema da copa */
+}
+
+.kick-transition__overlay {
+  width: min(80vw, 420px);
+  aspect-ratio: 1 / 1;
+  display: grid;
+  place-items: center;
+  background: transparent;
+}
+
+.kick-transition__gif {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  
+  /* Força a remoção de fundos claros/brancos brilhantes */
+  mix-blend-mode: color-dodge; 
+  
+  /* Ajuste fino de contraste para sumir com imperfeições do fundo */
+  filter: contrast(120%) brightness(100%); 
+}
