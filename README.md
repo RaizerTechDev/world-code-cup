@@ -73,17 +73,25 @@ Componentes reutilizáveis e organização escalável.
 
 ```text
 src/
+├── assets/
+│   ├── audio/
+│   ├── images/
+│   └── animations/
 ├── components/
+│   ├── Card/
 │   ├── Header/
 │   ├── Footer/
-│   └── Card/
+│   └── KickTransition/
 ├── pages/
-│   └── Home/
+│   ├── Home/
+│   ├── Regulamento/
+│   └── Ranking/
+├── routes/
+│   └── AppRoutes.jsx
 ├── styles/
 │   ├── global.scss
 │   └── variables.scss
 └── App.jsx
-```
 
 ---
 
