@@ -1,18 +1,36 @@
+@use '../../styles/variables.scss' as *;
+
 .kick-transition {
   position: fixed;
   inset: 0;
   z-index: 9999;
   display: grid;
   place-items: center;
-  background: rgba(0, 4, 7, 0.85); /* Fundo escuro puxando pro tema da copa */
+  background: radial-gradient(circle, #00121a 0%, #000204 100%);
+  overflow: hidden;
+  
+  /* 🎥 Mantém o ambiente 3D isolado no pai */
+  perspective: 1200px; 
+
+  /* 🪄 Força a tela inteira a sumir suavemente no final dos 3.5s, 
+     impedindo qualquer piscada de fundo branco do GIF */
+  animation: fadeOutContainer 3.5s ease-in-out forwards;
 }
 
 .kick-transition__overlay {
-  width: min(80vw, 420px);
+  width: min(85vw, 480px);
   aspect-ratio: 1 / 1;
   display: grid;
   place-items: center;
   background: transparent;
+  position: relative;
+  
+  /* ⚙️ Replica as propriedades de remoção de branco na camada de rotação */
+  mix-blend-mode: color-dodge;
+  filter: contrast(130%) brightness(100%);
+  
+  /* 🚀 Rotaciona o container */
+  animation: stadium360Rotation 3.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
 }
 
 .kick-transition__gif {
@@ -20,9 +38,40 @@
   height: auto;
   object-fit: contain;
   
-  /* Força a remoção de fundos claros/brancos brilhantes */
+  /* 🪄 O segredo intocado rodando no elemento */
   mix-blend-mode: color-dodge; 
-  
-  /* Ajuste fino de contraste para sumir com imperfeições do fundo */
-  filter: contrast(120%) brightness(100%); 
+  filter: contrast(130%) brightness(100%) drop-shadow(0 0 2rem rgba($cyber-blue-glow, 0.6));
+}
+
+/* 🎥 KEYFRAME DA ROTAÇÃO 3D */
+@keyframes stadium360Rotation {
+  0% {
+    transform: translateZ(-500px) rotateY(-180deg) rotateX(35deg);
+  }
+  30% {
+    transform: translateZ(-150px) rotateY(-45deg) rotateX(15deg);
+  }
+  85% {
+    transform: translateZ(0) rotateY(15deg) rotateX(-5deg);
+  }
+  100% {
+    transform: translateZ(150px) rotateY(0deg) rotateX(0deg);
+  }
+}
+
+/* 🟥 KEYFRAME DE SEGURANÇA: Esmaece o fundo e o conteúdo juntos */
+@keyframes fadeOutContainer {
+  0% {
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1; /* Mantém visível durante o chute e o giro */
+  }
+  100% {
+    opacity: 0; /* Some com tudo de forma blindada antes do unmount do React */
+    filter: blur(5px);
+  }
 }

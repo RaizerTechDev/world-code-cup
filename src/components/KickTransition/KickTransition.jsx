@@ -8,7 +8,7 @@ const KickTransition = ({ onEnd }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       if (onEnd) onEnd();
-    }, 1800);
+    }, 3500);
 
     return () => clearTimeout(timer);
   }, [onEnd]);
