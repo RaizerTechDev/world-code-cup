@@ -17,7 +17,7 @@ const Home = () => {
   useEffect(() => {
     const introTimer = setTimeout(() => {
       setIsIntroActive(false);
-    }, 3500);
+    }, 2500);
 
     return () => clearTimeout(introTimer);
   }, []);
