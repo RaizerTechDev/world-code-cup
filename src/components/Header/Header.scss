@@ -153,4 +153,22 @@
       }
     }
   }
+  // No seu Header.scss, certifique-se de estilizar os novos botões de navegação
+.nav-link-btn {
+  background: none;
+  border: none;
+  color: inherit;       /* Herda a cor branca/neon dos seus antigos links */
+  font-family: inherit;
+  font-size: inherit;   /* Mantém o tamanho do texto original */
+  font-weight: inherit;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  width: 100%;
+  text-align: left;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: #00bcff;    /* Cor de destaque quando passa o mouse */
+  }
+}
 }

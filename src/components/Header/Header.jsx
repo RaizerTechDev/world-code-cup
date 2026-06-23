@@ -1,31 +1,30 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Header.scss';
-
 import bgMusic from '../../assets/audio/musica-copa.mp3';
+import KickTransition from '../../components/KickTransition/KickTransition';
 
 const Header = () => {
+  const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
-
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  
+  // Estados para gerenciar a transição do chute no Header
+  const [showKick, setShowKick] = useState(false);
+  const [targetPath, setTargetPath] = useState('/');
 
-  // Tentativa de tocar assim que a página monta
   useEffect(() => {
     if (audioRef.current) {
-      // Alguns navegadores permitem áudio automático se o usuário já interagiu com o domínio antes
       audioRef.current.play()
-        .then(() => {
-          setIsPlaying(true);
-        })
+        .then(() => setIsPlaying(true))
         .catch((error) => {
           console.log("O navegador bloqueou o autoplay. Aguardando clique do usuário:", error);
         });
     }
   }, []);
 
-  // Função para alternar o som (Play / Pause)
   const toggleMusic = () => {
     if (audioRef.current) {
       if (isPlaying) {
@@ -37,51 +36,68 @@ const Header = () => {
     }
   };
 
+  // Intercepta a navegação para rodar o chute primeiro
+  const handleNavigation = (path) => {
+    setMenuOpen(false); // Fecha o menu mobile
+    setTargetPath(path);
+    setShowKick(true);
+  };
+
+  const handleTransitionEnd = () => {
+    setShowKick(false);
+    navigate(targetPath);
+  };
+
   return (
-    <header className="header">
-      <div className="header__container">
-        <a href="#home" className="header__logo" aria-label="World Code Cup Home">
-          WCC<span>.</span>
-        </a>
-                
-      {/* Elemento de Áudio invisível do HTML5 */}
-      <audio ref={audioRef} src={bgMusic} loop />
+    <>
+      {/* Renderiza a animação globalmente quando ativada pelo cabeçalho */}
+      {showKick && <KickTransition onEnd={handleTransitionEnd} />}
 
-      {/* 🔧 Botão de controle Flutuante de Som Cyberpunk */}
-      <button className={`audio-control ${isPlaying ? 'playing' : ''}`} onClick={toggleMusic}>
-        {isPlaying ? (
-          <span>🔊 MUTAR</span>
-        ) : (
-          <span>🔇 OUVIR TRILHA</span>
-        )}
-      </button>
+      <header className="header">
+        <div className="header__container">
+          <button 
+            className="header__logo-btn" 
+            onClick={() => handleNavigation('/')}
+            aria-label="World Code Cup Home"
+            style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
+          >
+            <span className="header__logo">WCC<span>.</span></span>
+          </button>
 
+          <audio ref={audioRef} src={bgMusic} loop />
 
+          <button className={`audio-control ${isPlaying ? 'playing' : ''}`} onClick={toggleMusic}>
+            {isPlaying ? <span>🔊 MUTAR</span> : <span>🔇 OUVIR TRILHA</span>}
+          </button>
 
-        {/* Botão de Menu para Acessibilidade e Mobile */}
-        <button 
-          className={`header__toggle ${menuOpen ? 'is-active' : ''}`}
-          onClick={() => setMenuOpen(!menuOpen)}
-          aria-label="Abrir menu de navegação"
-          aria-expanded={menuOpen}
-        >
-          {/* Ícone de menu */}
-          <span className="bar"></span>
-          <span className="bar"></span>
-          <span className="bar"></span>
-        </button>
+          <button
+            className={`header__toggle ${menuOpen ? 'is-active' : ''}`}
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label="Abrir menu de navegação"
+            aria-expanded={menuOpen}
+          >
+            <span className="bar"></span>
+            <span className="bar"></span>
+            <span className="bar"></span>
+          </button>
 
-        <nav className={`header__nav ${menuOpen ? 'header__nav--open' : ''}`}>
-          <ul>
-            <li><a href="#home" onClick={() => setMenuOpen(false)}>Home</a></li>
-            <li><a href="#ranking" onClick={() => setMenuOpen(false)}>Ranking</a></li>
-            <li><a href="#regras" onClick={() => setMenuOpen(false)}>Regras</a></li>
-          </ul>
-        </nav>
-      </div>
-    </header>
+          <nav className={`header__nav ${menuOpen ? 'header__nav--open' : ''}`}>
+            <ul>
+              <li>
+                <button onClick={() => handleNavigation('/')} className="nav-link-btn">Home</button>
+              </li>
+              <li>
+                <button onClick={() => handleNavigation('/ranking')} className="nav-link-btn">Ranking</button>
+              </li>
+              <li>
+                <button onClick={() => handleNavigation('/regulamento')} className="nav-link-btn">Regras</button>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </header>
+    </>
   );
 };
 
 export default Header;
-
