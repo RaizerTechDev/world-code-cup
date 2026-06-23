@@ -28,51 +28,80 @@
   }
 
   .audio-control {
-     background: linear-gradient(0deg, rgba(0, 13, 15, 0.95) 0%, rgba(0, 30, 45, 0.8) 100%);
+  background: linear-gradient(0deg, rgba(0, 13, 15, 0.95) 0%, rgba(0, 30, 45, 0.8) 100%);
+  border: 0.1rem solid $neon-blue;   // Borda azul neon
+  color: $neon-blue;                  // Texto azul neon
+  padding: 0.5rem 0.5rem;
+  font-size: 0.8rem;
+  font-weight: bold;
+  border-radius: 0.4rem;
+  cursor: pointer;
+  
+  // Otimizado para usar 12px de desfoque de forma consistente
   backdrop-filter: blur(12px); 
   -webkit-backdrop-filter: blur(12px);
-    border: 0.1rem solid $neon-blue;   // Borda azul neon
-    color: $neon-blue;      // Texto azul neon
-    padding: 0.5rem 0.5rem;
-    font-size: 0.8rem;
-    font-weight: bold;
-    border-radius: 0.4rem;
+  
+  transition: all 0.3s ease;
+  box-shadow: 0 0 1rem rgba(0, 229, 255, 0.2);
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    cursor: pointer;
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    transition: all 0.3s ease;
-    box-shadow: 0 0 1rem rgba(0, 229, 255, 0.2);
-    
-    // Alinhamento fino para ele ficar bonito ao lado do menu ou logo
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  // 💻 Desktop / Notebook
+  &:hover {
+    background: $neon-blue;
+    color: #000000;
+    box-shadow: 0 0 1.5rem rgba(0, 229, 255, 0.5);
+  }
+
+  // 🎼 Estado tocando música
+  &.playing {
+    border-color: $white-line;
+    color: $neon-golden;
 
     &:hover {
+      background: $white-line;
+      color: #000000;
+      box-shadow: 0 0 1.5rem rgba(255, 255, 255, 0.5);
+    }
+  }
+
+  // 📑 Tablet (Mantém tamanho e injeta o feedback de toque idêntico ao hover)
+  @include responsive(tablet) {
+    &:active {
       background: $neon-blue;
       color: #000000;
       box-shadow: 0 0 1.5rem rgba(0, 229, 255, 0.5);
     }
 
-    &.playing {
-      border-color: $white-line;
-      color: $neon-golden;
-
-      &:hover {
-        background: $white-line;
-        color: #000000;
-        box-shadow: 0 0 1.5rem rgba(0, 230, 118, 0.5);
-      }
-    }
-
-    // Ajuste fino para telas menores / Mobile
-    @include responsive(mobile) {
-      padding: 0.4rem 0.8rem;
-      font-size: 0.7rem;
+    &.playing:active {
+      background: $white-line;
+      color: #000000;
+      box-shadow: 0 0 1.5rem rgba(255, 255, 255, 0.5);
     }
   }
 
+  // 📱 Mobile (Ajusta tamanho e injeta o feedback de toque idêntico ao hover)
+  @include responsive(mobile) {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.7rem;
+
+    /* 🪄 O SEGREDO PRO MOBILE: O ':active' simula o clique físico do touch instantâneo 
+       aplicando a mesma virada de cor do notebook sem deixar o botão travado aceso. */
+    &:active {
+      background: $neon-blue;
+      color: #000000;
+      box-shadow: 0 0 1.5rem rgba(0, 229, 255, 0.5);
+    }
+
+    &.playing:active {
+      background: $white-line;
+      color: #000000;
+      box-shadow: 0 0 1.5rem rgba(255, 255, 255, 0.5);
+    }
+  }
+}
   .header__logo {
     color: #ffffff;
     font-size: 1.6rem;
