@@ -49,16 +49,23 @@
     border: 1px solid rgba(255, 255, 255, 0.2);
   }
 
-  h1 {
-    font-size: 3.5rem;
-    font-weight: 900;
-    letter-spacing: 0.15rem;
+  h1 {   
     color: #ffffff;
     text-shadow: 0 0 1.2rem rgba($cyber-blue-glow, 0.8);
-    margin-bottom: 0.5rem;
+    font-size: 1.8rem;      
+      margin-bottom: 1.5rem; 
+      padding: 0 1rem; 
+      line-height: 1.2; 
+      margin-top: 0rem;
+        font-weight: 900;
+
+    @include responsive(tablet) { 
+      font-size: 1.8rem;      
+      letter-spacing: 0.05rem;
+    }  
 
     @include responsive(mobile) { 
-      font-size: 2rem;
+      font-size: 1.8rem;      
       letter-spacing: 0.05rem;
     }
   }
