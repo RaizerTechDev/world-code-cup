@@ -1,0 +1,381 @@
+@use '../../styles/variables.scss' as *;
+
+// Reset preventivo para evitar barras de rolagem laterais fantasmas
+.ranking-page {
+  min-height: 100vh;
+  width: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  overflow-x: hidden; 
+  box-sizing: border-box;
+  
+  // Desktop
+  padding: 8rem 2rem 4rem; 
+  background: linear-gradient(rgba(0, 7, 10, 0.72), rgba(0, 7, 10, 0.88)),
+              url('../../assets/ranking/stadium-ranking.jpg') center/cover no-repeat fixed;
+
+  @include responsive(tablet) {
+    padding: 6rem 1.5rem 2rem;
+  }
+
+  @include responsive(mobile) {
+    // Reduzimos para 1rem. Isso dá "espaço de manobra" para o card interno
+    padding: 1.5rem 1.8rem 3rem; 
+  }
+}
+
+.ranking-hero {
+    width: 100%;
+  max-width: 1200px;
+  text-align: center;
+  margin: 0 auto 2rem;
+
+  .ranking-kicker {
+    color: $neon-blue;
+    letter-spacing: 0.14rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+  }
+
+  .neon-text-golden {
+    color: $gold-glow;
+    font-weight: bold;
+    font-size: 3rem;
+    text-shadow: 0 0 0.8rem rgba($gold-glow, 0.6);
+    margin-top: 3rem;
+
+    @include responsive(tablet) { font-size: 2.2rem; }
+    @include responsive(mobile) { 
+        font-size: 1.8rem;         
+    }
+  }
+
+  .neon-text-golden {
+    color: $gold-glow;
+    font-weight: bold;
+    font-size: 3rem;
+    text-shadow: 0 0 0.8rem rgba($gold-glow, 0.6);
+    margin-top: 3rem; // Espaço no desktop
+    margin-bottom: 1rem; // Espaço para o subtítulo
+
+    @include responsive(tablet) { 
+      font-size: 2.2rem; 
+      margin-top: 2rem;
+    }
+
+    @include responsive(mobile) { 
+      font-size: 1.8rem;      
+      margin-bottom: 1.5rem; 
+      padding: 0 1rem; 
+      line-height: 1.2; 
+    }
+  }
+
+  .fade-subtitle {
+      position: relative;
+    display: inline-block;
+    width: 100%; // Garante que o container do texto ocupe a largura total
+    font-size: 1.5rem;
+    color: $white-line;
+    opacity: 0.7;
+    animation: twinkle 3s infinite alternate;
+    left: 0; 
+    margin-top: -2rem;
+
+    .break-large {
+      display: block;
+      margin-top: 0.5rem;
+    }
+
+    @include responsive(tablet) {
+      font-size: 1.2rem;  
+      margin-bottom: 2rem;
+      .break-large { display: inline; }
+    }
+
+    @include responsive(mobile) {
+      font-size: 0.85rem;
+      margin-top: -2rem;
+      margin-bottom: 1.5rem;
+      padding: 0 1rem;
+      .break-large { display: inline; }
+    }
+  }
+}
+
+.ranking-stage {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: rgba(3, 10, 14, 0.62);
+  backdrop-filter: blur(8px);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  border: 0.12rem solid rgba(0, 229, 255, 0.2);
+
+  @include responsive(mobile) { 
+         padding: 1.2rem 0.8rem; // Padding interno menor para aproveitar a tela
+    border-radius: 0.8rem;
+    // Removemos qualquer margem negativa que possa estar puxando
+    margin-left: 0;
+    margin-right: 0;
+   }
+}
+
+.ranking-stage__layout {
+  display: grid;
+  grid-template-columns: 1fr 340px; 
+  gap: 1.5rem;
+
+  @include responsive(tablet) {
+    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+/* ESTRUTURA PARA REORDENAR EM TABLETS/MOBILE */
+.podium-column {
+  /* No desktop funciona normal. No tablet, "removemos" a div visualmente
+     para que seus filhos (Pódio e Ranking) possam ser ordenados separadamente */
+  @include responsive(tablet) {
+    display: contents; 
+  }
+}
+
+.podium-wrap {
+  @include responsive(tablet) { order: 1; } // 1º Pódio
+}
+
+.prizes-panel {
+  @include responsive(tablet) { order: 2; } // 2º Bancada (Avatares/Prêmios)
+}
+
+.ranking-board {
+  @include responsive(tablet) { order: 3; } // 3º Ranking Geral
+}
+
+
+/* PÓDIO */
+.podium-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.18fr 1fr;
+  gap: 1.2rem;
+  align-items: end;
+  margin-bottom: 2rem;
+
+  @include responsive(tablet) {
+    grid-template-columns: repeat(3, 1fr); // Mantém 3 colunas em tablets
+    gap: 0.5rem;
+  }
+
+  @include responsive(mobile) {
+    grid-template-columns: 1fr; // Empilha apenas no celular pequeno
+    gap: 1rem;
+      padding: 0 1rem; 
+      
+  }
+}
+
+.podium-slot {
+  text-align: center;
+  padding: 1.5rem 1rem;
+  background: rgba(255, 255, 255, 0.01);
+  border: 0.12rem dashed rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  transition: all 0.3s;
+
+  &.slot-first { 
+    min-height: 25rem; 
+    border-color: rgba($gold-glow, 0.25); 
+    @include responsive(tablet) { min-height: 20rem; }
+  }
+
+  @include responsive(tablet) {
+    padding: 1rem 0.5rem;
+    min-height: 18rem;
+  }
+}
+
+.podium-circle {
+  position: relative;
+  width: 9rem;
+  height: 9rem;
+  margin: 0 auto 1rem;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &--avatar { 
+    width: 9.5rem; height: 9.5rem; 
+    @include responsive(tablet) { width: 7rem; height: 7rem; }
+    @include responsive(mobile) { width: 9rem; height: 9rem; }
+  }
+  
+  &--prize { 
+    width: 4.5rem; height: 4.5rem; border-style: dashed; 
+    @include responsive(tablet) { width: 3.5rem; height: 3.5rem; }
+    @include responsive(mobile) { width: 4.5rem; height: 4.5rem; }
+  }
+}
+
+.podium-slot__avatar-content, .podium-slot__prize-content {
+  width: 100%; height: 100%; border-radius: 50%; overflow: hidden;
+  video { width: 100%; height: 100%; object-fit: cover; }
+}
+
+.mini-remove-btn {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 24px;
+  height: 24px;
+  background: #ff5c7a;
+  color: white;
+  border-radius: 50%;
+  border: 2px solid #030a0e;
+  font-size: 14px;
+  font-weight: 900;
+  cursor: pointer;
+  z-index: 10;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+
+/* SEÇÃO PONTUAÇÃO GERAL */
+.ranking-board {
+  margin-top: 2rem;
+  background: rgba(10, 16, 20, 0.82);
+  border: 0.12rem solid rgba(0, 229, 255, 0.18);
+  border-radius: 1rem;
+  padding: 1.2rem;
+  
+  @include responsive(mobile) { padding: 0.8rem; }
+
+  .ranking-board__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.9rem;
+    h2 { font-size: 1rem; color: #fff; text-transform: uppercase; }
+  }
+}
+
+.ranking-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 0.8rem;
+
+  @include responsive(mobile) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ranking-card {
+  display: grid;
+  grid-template-columns: 2.5rem 2.5rem 1fr;
+  gap: 0.8rem;
+  padding: 0.8rem;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.03);
+  border-left: 3px solid $neon-blue;
+  border-radius: 6px;
+  position: relative;
+
+  &__avatar {
+    width: 2.5rem; height: 2.5rem; border-radius: 50%; overflow: hidden;
+    video { width: 100%; height: 100%; object-fit: cover; }
+  }
+
+  &__info h3 { font-size: 0.9rem; color: #fff; }
+  &__bar {
+    position: absolute; bottom: 0; left: 0; width: 100%; height: 3px; background: rgba(255, 255, 255, 0.05);
+    span { display: block; height: 100%; background: linear-gradient(90deg, $neon-blue, $gold-glow); }
+  }
+}
+
+/* BANCADA LATERAL (QUE SOBE EM TABLETS) */
+.prizes-panel {
+  @include responsive(tablet) {
+    margin-bottom: 1rem;
+  }
+
+  &__sticky {
+    position: sticky;
+    top: 2rem;
+    @include responsive(tablet) { position: static; }
+  }
+}
+
+.draggable-bench {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  @include responsive(tablet) {
+    flex-direction: row; // Em tablets os grupos ficam lado a lado
+    flex-wrap: wrap;
+  }
+}
+
+.draggable-group {
+  @include responsive(tablet) { flex: 1; min-width: 250px; }
+
+  h3 {
+    font-size: 0.8rem;
+    color: $neon-blue;
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+    border-bottom: 1px solid rgba(0, 229, 255, 0.2);
+  }
+}
+
+.draggable-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 0.6rem;
+
+  @include responsive(tablet) {
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+  }
+}
+
+.draggable-item {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 8px;
+  padding: 0.5rem;
+  text-align: center;
+  cursor: grab;
+
+  .draggable-media {
+    width: 100%;
+    height: 3.5rem; // Reduzido para ser mais compacto
+    video { width: 100%; height: 100%; object-fit: contain; }
+  }
+
+  span {
+    display: block;
+    font-size: 0.6rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+/* ANIMAÇÕES */
+@keyframes twinkle {
+  from { opacity: 0.4; transform: scale(0.98); }
+  to { opacity: 0.8; transform: scale(1); }
+}
+
+@keyframes championBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.champion-bounce { animation: championBounce 0.6s ease infinite; }
