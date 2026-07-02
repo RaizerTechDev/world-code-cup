@@ -1,15 +1,12 @@
 @use "../../styles/variables.scss" as *;
 
 .home {
-   min-height: 100vh;  
+  min-height: 100vh;  
   background-image: url("../../assets/stadium-night.jpg");
   background-size: cover;
   background-position: center;
   color: $white-line;
-
-  // 🔧 Segurança da Fase 2: Impede estritamente o scroll horizontal das linhas/bola
- overflow-x: hidden;
-
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -17,9 +14,9 @@
   padding: 2rem;
   padding-top: 18rem;
 
-  @include responsive(tablet) {
+   @include responsive(tablet) {
     background-position: center top;
-    background-size: 125% 100.1%; 
+    background-size: 115% 100.1%; 
     background-repeat: no-repeat;
     padding-top: 0;
   }
@@ -35,7 +32,7 @@
   .home__overlay {
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.15);
+    background: rgba(0, 0, 0, 0.2);
     z-index: 1;
   }
   
@@ -44,72 +41,16 @@
     text-align: center;
     max-width: 1200px;
     width: 100%;
-    padding: 1rem;
     display: flex;
     flex-direction: column;
     align-items: center;
     position: relative;
     margin-top: 28vh;
 
-    // 📱 Ajuste Mobile/Tablet: Reduz o empurrão do topo para o texto não sumir da tela
-    @include responsive(tablet) {
-      margin-top: 14vh;
-    }
-
-    @include responsive(mobile) {
-      margin-top: 1rem; // Proporção para S20, iPhone 12Pro e A16
-    }
-  }
-  
-  // Linhas animadas no campo
-
-  .line-field {
-    position: absolute;
-    width: 100%;
-    height: 0.2rem;
-    background: $white-line;
-    z-index: 2;
-    pointer-events: none;
-    animation: moveLines 6s linear infinite;
+    @include responsive(tablet) { margin-top: 14vh; }
+    @include responsive(mobile) { margin-top: 1rem; }
   }
 
-  .line-top {
-    // Notebooks e Macbooks
-    top: 28%; 
-    
-    @include responsive(tablet) {
-      top: 21.5%; // Alinhamento do iPad Mini
-    }
-
-    @include responsive(mobile) {
-      /* Em vez de % ou vh, fixamos em rem a partir do topo do celular.
-        Como o background-position está em 'top', o letreiro da imagem estará sempre 
-        na mesma distância do topo do aparelho, seja no A16 ou no iPhone 12 Pro!
-      */
-      top: 11.2rem; 
-    }
-  }
-
-  .line-bottom {
-    // Notebooks e Macbooks
-    top: 72%; 
-
-    @include responsive(tablet) {
-      top: 50%;
-    }
-
-    @include responsive(mobile) {
-      // Fixado em rem acompanhando a proporção exata do bloco de cards no mobile
-      top: 27rem; 
-    }
-  }
-
-// Mantém o keyframe clássico que arrasta as linhas que você já usava
-@keyframes moveLines {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
-}
- 
   // Estrelas no fundo
   .stars {
     position: absolute;
@@ -131,7 +72,7 @@
     }
 
     &::after {
-      top: 76%;
+      top: 74%;
       left: 85%;
       font-size: 1rem;
       opacity: 0.5;
@@ -167,125 +108,145 @@
     }
   }
 
-  // GIF d// 🔧 GIF da bola vindo da direita travada na altura ideal acima do Regulamento
-  .ball-gif {
+
+  // --- ANIMAÇÃO DA BOLA (WEBM) ---
+  .ball-container {
     position: absolute;
-    top: 15rem;
-    width: 6rem;
-    height: 6rem;
-    background: url("https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExaXVnM3Fxa3N1cGZmcXE1Nm5jb2xqcDVrbWR1dW1ibGRkMjJuMnN3YyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/5t7ZjPj6xH7fhO1YPn/giphy.gif")
-      no-repeat center/cover;
-    animation: moveBall 10s linear infinite;
-    z-index: 3;
-
-    @include responsive(tablet) {
-      top: 33rem; // Move a bola para cima do subtítulo no mobile, livrando os cards
-      width: 4.5rem; // Diminui o tamanho para telas pequenas
-      height: 4.5rem;
-    }
-
-     @include responsive(mobile) {
-      top: 39rem; // Move a bola para cima do subtítulo no mobile, livrando os cards
-      width: 4.5rem; // Diminui o tamanho para telas pequenas
-      height: 4.5rem;
-    }
-  }
-
-  @keyframes moveBall {
-    0% {
-      left: 100%;
-    }
-    100% {
-      left: -10rem;
-    }
-  }
-
-  // GIF do jogador acima da bola
-  .player-gif {
-    position: absolute;
-    top: -15rem;
-    right: 0;
-    width: 8rem;
+    top: 5.5rem;
+    width: 8rem; // Um pouco maior que o GIF para aproveitar o WebM
     height: 8rem;
-    background: url("https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExc2dhdXlqMHoxMjExb3BiNnhyN2Z5eXhubmdkYXE1NnUwYWxxbGs2ZiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/oCxFrTnjF4pdFFEUzS/giphy.gif")
-      no-repeat center/cover;
-    z-index: 4;
+    z-index: 3;
+    pointer-events: none;
+    animation: moveBall 12s linear infinite;
 
-    @include responsive(tablet) {
-      top: 7rem; // Sobe o jogador para a linha do menu, limpando o meio da tela
-      right: 7%;
-      width: 6rem; // Proporcional para celular
-      height: 6rem;
+    .ball-webm {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
     }
 
-     @include responsive(mobile) {
-      top: 13rem; // Sobe o jogador para a linha do menu, limpando o meio da tela
-      right: -1rem;
-      width: 6rem; // Proporcional para celular
-      height: 6rem;
-    }    
+    @include responsive(tablet) { top: 36rem; width: 6rem; height: 6rem; }
+    @include responsive(mobile) { top: 32rem; width: 5.5rem; height: 5.5rem; }
   }
 
-  // Cards grid responsivo
+  // --- ANIMAÇÃO DO JOGADOR (WEBM) ---
+  .player-container {
+    position: absolute;
+    top: -19rem;
+    right: -2%;
+
+    width: 12rem;
+    height: 12rem;
+    z-index: 4;
+    pointer-events: none;
+
+    .player-webm {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    @include responsive(tablet) { top: 4rem; right: 3%; width: 9rem; height: 9rem; }
+    @include responsive(mobile) { top: 10rem; right: -3rem; width: 8rem; height: 8rem; }    
+  }
+
+  // KEYFRAMES MANTIDOS
+  @keyframes moveBall {
+    0% { left: 110%; transform: rotate(0deg); }
+    100% { left: -15rem; transform: rotate(-360deg); }
+  }
+
+  // --- CARDS ---
   .cards {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
     gap: 2rem;
-    margin-top: 2rem;
+    margin-top: 3rem;
     width: 100%;
     max-width: 900px;
-    justify-content: center;
-    margin-left: auto;
-    margin-right: auto;
+    z-index: 5;
 
-    // 📱 Centraliza os cards no mobile quando eles quebrarem em uma coluna só
+    @include responsive(tablet) { 
+      grid-template-columns: 1fr; 
+      max-width: 24rem; 
+      margin-top: 22rem; 
+    }
+    @include responsive(mobile) { 
+      grid-template-columns: 1fr; 
+      margin-top: 19rem; 
+      max-width: 22rem; 
+    }
+  }
+
+  // --- LINHAS E ESTRELAS MANTIDOS CONFORME SEU CÓDIGO ---
+  .line-field {
+    position: absolute;
+    width: 100%;
+    height: 0.2rem;
+    background: $white-line;
+    z-index: 2;
+    animation: moveLines 6s linear infinite;
+  }
+  
+  .line-top {
+    // Notebooks e Macbooks
+    top: 28%; 
+    
     @include responsive(tablet) {
-      grid-template-columns: 1fr;
-    max-width: 24rem;          
-    margin-top: 22rem;          
-    padding: 0 1rem;
+      top: 23%; // Alinhamento do iPad Mini
     }
 
-    // 📱 Centraliza os cards no mobile quando eles quebrarem em uma coluna só
     @include responsive(mobile) {
-      grid-template-columns: 1fr; // Mantém uma coluna perfeita
-      margin-top: 20rem;           // 🔧 Deixa o fluxo natural logo após o subtítulo, sem empurrar demais!
-      padding: 0 1.5rem;          // Respiro perfeito nas laterais para telas de 360px a 430px
-      width: 100%;
-      max-width: 22rem;        
-      box-sizing: border-box;
+      /* Em vez de % ou vh, fixamos em rem a partir do topo do celular.
+        Como o background-position está em 'top', o letreiro da imagem estará sempre 
+        na mesma distância do topo do aparelho, seja no A16 ou no iPhone 12 Pro!
+      */
+      top: 10.2rem; 
+    }
+  }
+
+  .line-bottom {
+    // Notebooks e Macbooks
+    top: 72%; 
+
+    @include responsive(tablet) {
+      top: 52%;
+    }
+
+    @include responsive(mobile) {
+      // Fixado em rem acompanhando a proporção exata do bloco de cards no mobile
+      top: 23rem; 
     }
   }
 }
-// Cards com fade
-.fade-cards {
-  opacity: 0;
-  animation: fadeInUp 1.2s ease forwards;
-  animation-delay: 2.5s;
+
+// Mantém o keyframe clássico que arrasta as linhas que você já usava
+@keyframes moveLines {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }
 
-// Subtítulo com efeito
 .fade-subtitle {
   position: relative;
   display: inline-block;
   cursor: pointer;
   font-size: 1.9rem;
   color: $white-line;
-  top: 3rem;
+  top: 3.6rem;
   margin-bottom: 1.8rem; 
    opacity: 0.7;
     animation: twinkle 3s infinite alternate;
  
 
   @include responsive(tablet) {
-    font-size: 1.3rem; // Diminui a fonte do texto para não estourar a tela do celular
-    margin-top: -3rem; // Dá espaço para os GIFs trabalharem
+    font-size: 1.5rem; // Diminui a fonte do texto para não estourar a tela do celular
+    top: 0; // Dá espaço para os GIFs trabalharem
     margin-bottom: 2rem;
   }
 
   @include responsive(mobile) {
     font-size: 0.9rem;      // Tamanho ideal para leitura no celular sem quebrar linha
-    margin-top: 4rem;     // 🔧 MARGEM POSITIVA: Empurra o texto para baixo dos GIFs, fazendo ele aparecer!
+    margin-top: 1rem;     // 🔧 MARGEM POSITIVA: Empurra o texto para baixo dos GIFs, fazendo ele aparecer!
     margin-bottom: 1.5rem;  // Espaço controlado entre o subtítulo e o topo dos Cards
     padding: 0 1rem; 
     left: 7%;  
@@ -310,16 +271,4 @@
   &:hover::after {
     width: 100%;
   }
-}
-
-
-@keyframes fadeInUp {
-  0% {
-    opacity: 0;
-    transform: translateY(2rem);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }  
 }

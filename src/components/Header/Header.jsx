@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useEffect, useRef, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './Header.scss';
 import bgMusic from '../../assets/audio/musica-copa.mp3';
 import KickTransition from '../../components/KickTransition/KickTransition';
@@ -14,6 +14,8 @@ const Header = () => {
   // Estados para gerenciar a transição do chute no Header
   const [showKick, setShowKick] = useState(false);
   const [targetPath, setTargetPath] = useState('/');
+   // No Header, geralmente começamos com false, pois a Intro acontece na Home
+  const [isIntroActive, setIsIntroActive] = useState(false); 
 
   useEffect(() => {
     if (audioRef.current) {
@@ -43,16 +45,28 @@ const Header = () => {
     setShowKick(true);
   };
 
-  const handleTransitionEnd = () => {
-    setShowKick(false);
-    navigate(targetPath);
+ const handleTransitionEnd = () => {
+    if (isIntroActive) {
+      setIsIntroActive(false);
+    } else {
+      // 1. Primeiro mandamos mudar a página (o chute ainda está na tela cobrindo tudo)
+      navigate(targetPath);
+
+      // 2. Esperamos 150ms. Esse tempo é o "segredo" para o navegador 
+      // renderizar o fundo da nova página antes de tirarmos a cortina.
+      setTimeout(() => {
+        setShowKick(false);
+      }, 150); 
+    }
   };
 
   return (
     <>
       {/* Renderiza a animação globalmente quando ativada pelo cabeçalho */}
-      {showKick && <KickTransition onEnd={handleTransitionEnd} />}
-
+ {showKick && (
+        <KickTransition onEnd={handleTransitionEnd} />
+      )}
+      
       <header className="header">
         <div className="header__container">
           <button 

@@ -1,22 +1,32 @@
-// src/components/KickTransition/KickTransition.jsx
-// eslint-disable-next-line no-unused-vars
-import React, { useEffect } from 'react';
+/* eslint-disable no-unused-vars */
+import React, { useEffect, useRef } from 'react';
 import './KickTransition.scss';
-import kickGif from '../../assets/animations/kick-player.gif';
+import kickVideo from '../../assets/animations/kick-player.webm';
 
 const KickTransition = ({ onEnd }) => {
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (onEnd) onEnd();
-    }, 3500);
+  const videoRef = useRef(null);
 
-    return () => clearTimeout(timer);
-  }, [onEnd]);
+  useEffect(() => {
+    // Garantia extra de que o vídeo vai dar play
+    if (videoRef.current) {
+      videoRef.current.play().catch(error => {
+        console.error("Erro ao dar play no vídeo de transição:", error);
+      });
+    }
+  }, []);
 
   return (
     <div className="kick-transition">
       <div className="kick-transition__overlay">
-        <img src={kickGif} alt="Jogador chutando a bola" className="kick-transition__gif" />
+        <video 
+          ref={videoRef}
+          src={kickVideo} 
+          className="kick-transition__webm" 
+          autoPlay 
+          muted 
+          playsInline
+          onEnded={onEnd} // O React chama o onEnd do Header/Home assim que o vídeo acaba
+        />
       </div>
     </div>
   );
