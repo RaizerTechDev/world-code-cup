@@ -1,14 +1,14 @@
 @use "../../styles/variables.scss" as *;
 
 .home {
-  // ... mantenha suas propriedades iniciais iguais
+   min-height: 100vh;  
   background-image: url("../../assets/stadium-night.jpg");
   background-size: cover;
   background-position: center;
   color: $white-line;
 
   // 🔧 Segurança da Fase 2: Impede estritamente o scroll horizontal das linhas/bola
-  overflow-x: hidden;
+ overflow-x: hidden;
 
   display: flex;
   flex-direction: column;
@@ -24,11 +24,12 @@
     padding-top: 0;
   }
 
-  // 📱 breakpoint para Celulares (como o do seu print de 399px)
+  // 📱 breakpoint para Celulares
   @include responsive(mobile) {
     background-position: center 0%;
     background-size: 125% 100.1%;
     background-repeat: no-repeat;
+    padding-top: 0;
   }
 
   .home__overlay {
@@ -59,49 +60,6 @@
       margin-top: 1rem; // Proporção para S20, iPhone 12Pro e A16
     }
   }
-
-  // Estilos para audio
-  .audio-control {
-    position: fixed;
-    bottom: 4rem; // Fica um pouco acima do seu Footer compacto no mobile
-    right: 2rem;
-    z-index: 150; // Fica acima do conteúdo, mas abaixo de modais/menus
-    background: rgba(0, 13, 15, 0.8);
-    border: 0.1rem solid $neon-blue;
-    color: $neon-blue;
-    padding: 0.6rem 1rem;
-    font-size: 0.8rem;
-    font-weight: bold;
-    border-radius: 0.4rem;
-    cursor: pointer;
-    backdrop-filter: blur(4px);
-    transition: all 0.3s ease;
-    box-shadow: 0 0 1rem rgba(0, 229, 255, 0.1);
-
-    &:hover {
-      background: $neon-blue;
-      color: #000;
-      box-shadow: 0 0 1.5rem rgba(0, 229, 255, 0.4);
-    }
-
-    &.playing {
-      border-color: #00e676; // Muda para verde neon se estiver tocando
-      color: #00e676;
-
-      &:hover {
-        background: #00e676;
-        color: #000;
-        box-shadow: 0 0 1.5rem rgba(0, 230, 118, 0.4);
-      }
-    }
-
-    @include responsive(mobile) {
-      bottom: 5.5rem; // Sobe um pouquinho mais no celular para não cobrir o texto do footer
-      right: 1rem;
-      font-size: 0.75rem;
-      padding: 0.5rem 0.8rem;
-    }
-  }
   
   // Linhas animadas no campo
 
@@ -117,8 +75,8 @@
 
   .line-top {
     // Notebooks e Macbooks
-    top: 21%; 
-
+    top: 28%; 
+    
     @include responsive(tablet) {
       top: 21.5%; // Alinhamento do iPad Mini
     }
@@ -134,7 +92,7 @@
 
   .line-bottom {
     // Notebooks e Macbooks
-    top: 64%; 
+    top: 72%; 
 
     @include responsive(tablet) {
       top: 50%;
@@ -164,7 +122,7 @@
     &::after {
       content: "✨✨✨✨✨";
       position: absolute;
-      top: 27%;
+      top: 22%;
       left: 10%;
       font-size: 1.2rem;
       color: #fff;
@@ -173,8 +131,8 @@
     }
 
     &::after {
-      top: 68%;
-      left: 75%;
+      top: 76%;
+      left: 85%;
       font-size: 1rem;
       opacity: 0.5;
     }
@@ -192,8 +150,8 @@
 
     @include responsive(mobile) {
       &::before {
-        top: 9rem; // Ajuste fino específico para a tela do celular
-        font-size: 0.9rem; // Estrelas um pouco menores para combinar com o smartphone      
+        top: 6rem; 
+        font-size: 0.9rem; 
       }
     }
   }
@@ -212,7 +170,7 @@
   // GIF d// 🔧 GIF da bola vindo da direita travada na altura ideal acima do Regulamento
   .ball-gif {
     position: absolute;
-    top: 12rem;
+    top: 15rem;
     width: 6rem;
     height: 6rem;
     background: url("https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExaXVnM3Fxa3N1cGZmcXE1Nm5jb2xqcDVrbWR1dW1ibGRkMjJuMnN3YyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/5t7ZjPj6xH7fhO1YPn/giphy.gif")
@@ -245,7 +203,7 @@
   // GIF do jogador acima da bola
   .player-gif {
     position: absolute;
-    top: 0;
+    top: -15rem;
     right: 0;
     width: 8rem;
     height: 8rem;
@@ -284,7 +242,7 @@
     @include responsive(tablet) {
       grid-template-columns: 1fr;
     max-width: 24rem;          
-    margin-top: 18rem;          
+    margin-top: 22rem;          
     padding: 0 1rem;
     }
 
@@ -299,6 +257,12 @@
     }
   }
 }
+// Cards com fade
+.fade-cards {
+  opacity: 0;
+  animation: fadeInUp 1.2s ease forwards;
+  animation-delay: 2.5s;
+}
 
 // Subtítulo com efeito
 .fade-subtitle {
@@ -307,17 +271,21 @@
   cursor: pointer;
   font-size: 1.9rem;
   color: $white-line;
-  margin-bottom: 3rem; // 🔧 espaço extra antes dos cards
+  top: 3rem;
+  margin-bottom: 1.8rem; 
+   opacity: 0.7;
+    animation: twinkle 3s infinite alternate;
+ 
 
   @include responsive(tablet) {
-    font-size: 1.7rem; // Diminui a fonte do texto para não estourar a tela do celular
-    margin-top: 0; // Dá espaço para os GIFs trabalharem
+    font-size: 1.3rem; // Diminui a fonte do texto para não estourar a tela do celular
+    margin-top: -3rem; // Dá espaço para os GIFs trabalharem
     margin-bottom: 2rem;
   }
 
   @include responsive(mobile) {
     font-size: 0.9rem;      // Tamanho ideal para leitura no celular sem quebrar linha
-    margin-top: 5rem;     // 🔧 MARGEM POSITIVA: Empurra o texto para baixo dos GIFs, fazendo ele aparecer!
+    margin-top: 4rem;     // 🔧 MARGEM POSITIVA: Empurra o texto para baixo dos GIFs, fazendo ele aparecer!
     margin-bottom: 1.5rem;  // Espaço controlado entre o subtítulo e o topo dos Cards
     padding: 0 1rem; 
     left: 7%;  
@@ -344,12 +312,6 @@
   }
 }
 
-// Cards com fade
-.fade-cards {
-  opacity: 0;
-  animation: fadeInUp 1.2s ease forwards;
-  animation-delay: 2.5s;
-}
 
 @keyframes fadeInUp {
   0% {
@@ -361,5 +323,3 @@
     transform: translateY(0);
   }  
 }
-
-

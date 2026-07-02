@@ -20,6 +20,8 @@ $font-main: 'Inter', sans-serif;
 $mobile: 30rem;   // ~480px
 $tablet: 48rem;   // ~768px
 $laptop: 64rem;   // ~1024px
+$large: 73.75rem; // ~1180px  (Novo)
+$xl: 90rem;       // ~1440px  (Novo)
 
 // Responsividade mixin
 @mixin responsive($device) {
@@ -32,5 +34,14 @@ $laptop: 64rem;   // ~1024px
   @if $device == laptop {
     @media (max-width: $laptop) { @content; }
   }
+  
+  // 🖥️ Telas Grandes (Geralmente Macbooks maiores ou Monitores Desktop comuns)
+  @if $device == large {
+    @media (min-width: $large) { @content; }
+  }
+  
+  // 🚀 Telas Extra Grandes (Monitores Gamer, Ultrawide e TVs 4K)
+  @if $device == xl {
+    @media (min-width: $xl) { @content; }
+  }
 }
-
