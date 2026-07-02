@@ -175,8 +175,8 @@ colors: ['#00e5ff', '#ffea00', '#00e676'],
     <main className="ranking-page">
       <section className="ranking-hero">
         <p className="ranking-kicker">WORLD CODE CUP • RANKING AO VIVO</p>
-        <h1 className="neon-text-golden">Podium das Seleções</h1>
-        <p className="fade-subtitle">
+        <h1 className="neon-text-golden-ranking">Podium das Seleções</h1>
+        <p className="subtitle-text">
          Em tempo real e dinâmico. Mova os avatares e prêmios para o pódio,
           <span className="break-large">conforme a pontuação geral.</span>
         </p>
