@@ -359,3 +359,37 @@
 }
 
 .champion-bounce { animation: championBounce 0.6s ease infinite; }
+
+
+.draggable-item, .podium-slot__swap-handle {
+  &.is-selected {
+    border-color: $neon-blue !important;
+    background: rgba(0, 229, 255, 0.2) !important;
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
+    animation: selectionPulse 1.5s infinite;
+  }
+}
+
+.podium-circle {
+  // Feedback visual de onde o item selecionado pode cair
+  &.can-drop {
+    border-color: rgba(0, 229, 255, 0.6);
+    background: rgba(0, 229, 255, 0.05);
+    border-style: solid;
+  }
+}
+
+@keyframes selectionPulse {
+  0% { opacity: 0.8; }
+  50% { opacity: 1; }
+  100% { opacity: 0.8; }
+}
+
+// Melhora a usabilidade do clique no mobile
+@include responsive(mobile) {
+  .podium-circle, .draggable-item, .podium-slot__swap-handle {
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent; // Remove o brilho de clique do mobile
+  }
+}
