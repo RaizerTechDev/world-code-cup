@@ -3,6 +3,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import confetti from 'canvas-confetti';
 import './Ranking.scss';
 
+// ... (seus imports de assets permanecem iguais)
 import brazil from '../../assets/webm/brasil-avatar.webm';
 import argentina from '../../assets/webm/argentina-avatar.webm';
 import france from '../../assets/webm/france-avatar.webm';
@@ -11,7 +12,6 @@ import spain from '../../assets/webm/spain-avatar.webm';
 import japan from '../../assets/webm/japan-avatar.webm';
 import eua from '../../assets/webm/eua-avatar.webm';
 import morocco from '../../assets/webm/morocco-avatar.webm';
-
 import trophy from '../../assets/webm/trophy.webm';
 import silverTrophy from '../../assets/webm/silver-trophy.webm';
 import bronzeTrophy from '../../assets/webm/bronze-trophy.webm';
@@ -54,8 +54,10 @@ const Ranking = ({ userId }) => {
   const [availableItems, setAvailableItems] = useState(initial.availableItems);
   const [slots, setSlots] = useState(initial.slots);
   const [dragOverSlot, setDragOverSlot] = useState(null);
-  const [swapPulse, setSwapPulse] = useState(null);
   const [championBounce, setChampionBounce] = useState(false);
+  
+  // NOVO: Estado para seleção via clique (Mobile friendly)
+  const [activeSelection, setActiveSelection] = useState(null);
 
   const topScore = rankingData[0]?.points || 1;
 
@@ -85,30 +87,44 @@ const Ranking = ({ userId }) => {
     return () => clearTimeout(timer);
   }, [slots, availableItems, userId]);
 
- const triggerCelebration = () => {
-setChampionBounce(true);
-
-// Confetti efeito de explosão de cores lado direito e esquerdo do pódio  
-confetti({
-particleCount: 150,
-spread: 80,
-origin: { x: 0.2, y: 0.6 },
-colors: ['#00e5ff', '#ffea00', '#00e676'],
-});
-confetti({
-particleCount: 150,
-spread: 80,
-origin: { x: 0.8, y: 0.6 },
-colors: ['#00e5ff', '#ffea00', '#00e676'],
-});
-};
-  const handleDragStart = (e, item, sourceSlot = null) => {
-    e.dataTransfer.setData('application/json', JSON.stringify({ ...item, sourceSlot }));
+  const triggerCelebration = () => {
+    setChampionBounce(true);
+    confetti({ particleCount: 150, spread: 80, origin: { x: 0.2, y: 0.6 }, colors: ['#00e5ff', '#ffea00', '#00e676'] });
+    confetti({ particleCount: 150, spread: 80, origin: { x: 0.8, y: 0.6 }, colors: ['#00e5ff', '#ffea00', '#00e676'] });
   };
 
-  const handleDragOver = (e, slotKey) => {
-    e.preventDefault();
-    if (dragOverSlot !== slotKey) setDragOverSlot(slotKey);
+  // --- LÓGICA DE MOVIMENTAÇÃO UNIFICADA ---
+  const executeMove = (item, slotKey, isPrizeDrop) => {
+    const itemType = item.type || item.kind;
+
+    // Validação de prêmios
+    if (isPrizeDrop) {
+      const allowed = { first: 'trophy', second: 'silver-trophy', third: 'bronze-trophy' };
+      if (itemType !== allowed[slotKey]) return;
+      if (slotKey === 'first') triggerCelebration();
+    } else {
+      if (itemType !== 'avatar') return;
+    }
+
+    const targetKey = isPrizeDrop ? `${slotKey}Prize` : slotKey;
+    const oldItem = slots[targetKey];
+
+    setSlots(prev => {
+      const next = { ...prev, [targetKey]: item };
+      // Se o item veio de outro slot, faz o swap (troca)
+      if (item.sourceSlot && item.sourceSlot !== targetKey) {
+        next[item.sourceSlot] = oldItem;
+      }
+      return next;
+    });
+
+    // Se o item veio da bancada (pool), remove ele de lá e devolve o antigo se houver
+    if (!item.sourceSlot) {
+      removeItemFromPool(item);
+      if (oldItem) addItemBackToPool(oldItem);
+    }
+
+    setActiveSelection(null); // Limpa seleção após mover
   };
 
   const addItemBackToPool = (item) => {
@@ -131,41 +147,53 @@ colors: ['#00e5ff', '#ffea00', '#00e676'],
     }));
   };
 
+  // --- HANDLERS PARA DESKTOP (Drag & Drop) ---
+  const handleDragStart = (e, item, sourceSlot = null) => {
+    e.dataTransfer.setData('application/json', JSON.stringify({ ...item, sourceSlot }));
+  };
+
+  const handleDragOver = (e, slotKey) => {
+    e.preventDefault();
+    if (dragOverSlot !== slotKey) setDragOverSlot(slotKey);
+  };
+
   const handleDrop = (e, slotKey, isPrizeDrop = false) => {
     e.preventDefault();
     setDragOverSlot(null);
     const raw = e.dataTransfer.getData('application/json');
     if (!raw) return;
-    const item = JSON.parse(raw);
-    const itemType = item.type || item.kind;
-
-    if (isPrizeDrop) {
-      const allowed = { first: 'trophy', second: 'silver-trophy', third: 'bronze-trophy' };
-      if (itemType !== allowed[slotKey]) return;
-      if (slotKey === 'first') triggerCelebration();
-    } else if (itemType !== 'avatar') return;
-
-    const targetKey = isPrizeDrop ? `${slotKey}Prize` : slotKey;
-    const oldItem = slots[targetKey];
-
-    setSlots(prev => ({ ...prev, [targetKey]: item }));
-    if (!item.sourceSlot) {
-      removeItemFromPool(item);
-      if (oldItem) addItemBackToPool(oldItem);
-    }
-    setSwapPulse(slotKey);
+    executeMove(JSON.parse(raw), slotKey, isPrizeDrop);
   };
 
-  const handleReturnItem = (slotKey) => {
+  // --- HANDLERS PARA MOBILE (Click to Place) ---
+  const handleItemClick = (item, sourceSlot = null) => {
+    // Se o item já está selecionado e clicamos nele de novo, cancela a seleção
+    if (activeSelection?.id === item.id) {
+      setActiveSelection(null);
+    } else {
+      setActiveSelection({ ...item, sourceSlot });
+    }
+  };
+
+  const handleSlotClick = (slotKey, isPrizeDrop) => {
+    if (activeSelection) {
+      executeMove(activeSelection, slotKey, isPrizeDrop);
+    }
+  };
+
+  const handleReturnItem = (e, slotKey) => {
+    e.stopPropagation(); // Impede que o clique no botão ative o slot
     const item = slots[slotKey];
     if (!item) return;
     addItemBackToPool(item);
     setSlots(prev => ({ ...prev, [slotKey]: null }));
+    setActiveSelection(null);
   };
 
   const handleResetBoard = () => {
     setSlots(initial.slots);
     setAvailableItems(initial.availableItems);
+    setActiveSelection(null);
     localStorage.removeItem(STORAGE_KEY(userId));
   };
 
@@ -177,7 +205,7 @@ colors: ['#00e5ff', '#ffea00', '#00e676'],
         <p className="ranking-kicker">WORLD CODE CUP • RANKING AO VIVO</p>
         <h1 className="neon-text-golden-ranking">Podium das Seleções</h1>
         <p className="subtitle-text">
-         Em tempo real e dinâmico. Mova os avatares e prêmios para o pódio,
+         Em tempo real e dinâmico. Selecione ou arraste os avatares e prêmios,
           <span className="break-large">conforme a pontuação geral.</span>
         </p>
       </section>
@@ -194,17 +222,19 @@ colors: ['#00e5ff', '#ffea00', '#00e676'],
 
                   return (
                     <article key={slotKey} className={`podium-slot slot-${slotKey} ${dragOverSlot === slotKey ? 'drag-over' : ''}`}>
+                      {/* Avatar Slot */}
                       <div
-                        className={`podium-circle podium-circle--avatar ${config.ringClass} ${slotKey === 'first' && championBounce ? 'champion-bounce' : ''}`}
+                        className={`podium-circle podium-circle--avatar ${config.ringClass} ${slotKey === 'first' && championBounce ? 'champion-bounce' : ''} ${activeSelection && activeSelection.kind === 'avatar' && !avatarItem ? 'can-drop' : ''}`}
                         onDragOver={(e) => handleDragOver(e, `${slotKey}-avatar`)}
                         onDrop={(e) => handleDrop(e, slotKey, false)}
+                        onClick={() => handleSlotClick(slotKey, false)}
                       >
                         {avatarItem ? (
                           <>
                             <div className="podium-slot__avatar-content">
                               <video src={avatarItem.webm} autoPlay loop muted playsInline />
                             </div>
-                            <button type="button" className="mini-remove-btn" onClick={() => handleReturnItem(slotKey)}>×</button>
+                            <button type="button" className="mini-remove-btn" onClick={(e) => handleReturnItem(e, slotKey)}>×</button>
                           </>
                         ) : (
                           <div className="podium-slot__placeholder">{config.title.split(' ')[0]}</div>
@@ -214,17 +244,19 @@ colors: ['#00e5ff', '#ffea00', '#00e676'],
                       <div className={`podium-slot__label ${config.labelClass}`}>{config.title}</div>
                       <div className="podium-slot__name">{avatarItem?.name || 'Aguardando'}</div>
 
+                      {/* Prize Slot */}
                       <div
-                        className="podium-circle podium-circle--prize"
+                        className={`podium-circle podium-circle--prize ${activeSelection && activeSelection.type && activeSelection.type !== 'avatar' && !prizeItem ? 'can-drop' : ''}`}
                         onDragOver={(e) => handleDragOver(e, `${slotKey}-prize`)}
                         onDrop={(e) => handleDrop(e, slotKey, true)}
+                        onClick={() => handleSlotClick(slotKey, true)}
                       >
                         {prizeItem ? (
                           <>
                             <div className="podium-slot__prize-content">
                               <video src={prizeItem.webm} autoPlay loop muted playsInline />
                             </div>
-                            <button type="button" className="mini-remove-btn" onClick={() => handleReturnItem(`${slotKey}Prize`)}>×</button>
+                            <button type="button" className="mini-remove-btn" onClick={(e) => handleReturnItem(e, `${slotKey}Prize`)}>×</button>
                           </>
                         ) : (
                           <div className="podium-slot__prize-placeholder">+</div>
@@ -233,7 +265,12 @@ colors: ['#00e5ff', '#ffea00', '#00e676'],
 
                       <div className="podium-slot__actions">
                         {avatarItem && (
-                          <div className="podium-slot__swap-handle" draggable onDragStart={(e) => handleDragStart(e, avatarItem, slotKey)}>
+                          <div 
+                            className={`podium-slot__swap-handle ${activeSelection?.id === avatarItem.id ? 'is-selected' : ''}`} 
+                            draggable 
+                            onDragStart={(e) => handleDragStart(e, avatarItem, slotKey)}
+                            onClick={() => handleItemClick(avatarItem, slotKey)}
+                          >
                             Mover Seleção
                           </div>
                         )}
@@ -244,9 +281,9 @@ colors: ['#00e5ff', '#ffea00', '#00e676'],
               </div>
             </div>
 
-            {/* SEÇÃO DE PONTUAÇÃO GERAL*/}
             <section className="ranking-board">
-              <div className="ranking-board__header">
+                {/* ... conteúdo da pontuação geral igual ... */}
+                <div className="ranking-board__header">
                 <h2>Pontuação Geral</h2>
                 <button className="ranking-reset" onClick={handleResetBoard}>Reset geral</button>
               </div>
@@ -270,7 +307,6 @@ colors: ['#00e5ff', '#ffea00', '#00e676'],
             </section>
           </div>
 
-          {/* AVATARES E PRÊMIOS NA LATERAL */}
           <aside className="prizes-panel">
             <div className="prizes-panel__sticky">
               <div className="draggable-bench">
@@ -278,7 +314,13 @@ colors: ['#00e5ff', '#ffea00', '#00e676'],
                   <h3>Avatares</h3>
                   <div className="draggable-row">
                     {availableItems.avatars.map((team) => (
-                      <div key={team.id} className={`draggable-item draggable-item--${team.accent}`} draggable onDragStart={(e) => handleDragStart(e, team)}>
+                      <div 
+                        key={team.id} 
+                        className={`draggable-item draggable-item--${team.accent} ${activeSelection?.id === team.id ? 'is-selected' : ''}`} 
+                        draggable 
+                        onDragStart={(e) => handleDragStart(e, team)}
+                        onClick={() => handleItemClick(team)}
+                      >
                         <div className="draggable-media"><video src={team.webm} autoPlay loop muted playsInline /></div>
                         <span>{team.name}</span>
                       </div>
@@ -289,7 +331,13 @@ colors: ['#00e5ff', '#ffea00', '#00e676'],
                   <h3>Prêmios</h3>
                   <div className="draggable-row">
                     {availableItems.prizes.map((p) => (
-                      <div key={p.id} className="draggable-item" draggable onDragStart={(e) => handleDragStart(e, p)}>
+                      <div 
+                        key={p.id} 
+                        className={`draggable-item ${activeSelection?.id === p.id ? 'is-selected' : ''}`} 
+                        draggable 
+                        onDragStart={(e) => handleDragStart(e, p)}
+                        onClick={() => handleItemClick(p)}
+                      >
                         <div className="draggable-media"><video src={p.webm} autoPlay loop muted playsInline /></div>
                         <span>{p.label}</span>
                       </div>
