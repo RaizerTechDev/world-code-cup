@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import confetti from 'canvas-confetti';
 import './Ranking.scss';
 
-// ... (seus imports de assets permanecem iguais)
+// Importação de Assets
 import brazil from '../../assets/webm/brasil-avatar.webm';
 import argentina from '../../assets/webm/argentina-avatar.webm';
 import france from '../../assets/webm/france-avatar.webm';
@@ -12,6 +12,7 @@ import spain from '../../assets/webm/spain-avatar.webm';
 import japan from '../../assets/webm/japan-avatar.webm';
 import eua from '../../assets/webm/eua-avatar.webm';
 import morocco from '../../assets/webm/morocco-avatar.webm';
+
 import trophy from '../../assets/webm/trophy.webm';
 import silverTrophy from '../../assets/webm/silver-trophy.webm';
 import bronzeTrophy from '../../assets/webm/bronze-trophy.webm';
@@ -56,7 +57,7 @@ const Ranking = ({ userId }) => {
   const [dragOverSlot, setDragOverSlot] = useState(null);
   const [championBounce, setChampionBounce] = useState(false);
   
-  // NOVO: Estado para seleção via clique (Mobile friendly)
+  // Estado para seleção via clique (Essencial para Mobile)
   const [activeSelection, setActiveSelection] = useState(null);
 
   const topScore = rankingData[0]?.points || 1;
@@ -93,11 +94,10 @@ const Ranking = ({ userId }) => {
     confetti({ particleCount: 150, spread: 80, origin: { x: 0.8, y: 0.6 }, colors: ['#00e5ff', '#ffea00', '#00e676'] });
   };
 
-  // --- LÓGICA DE MOVIMENTAÇÃO UNIFICADA ---
+  // Lógica de Movimento Unificada (PC e Celular)
   const executeMove = (item, slotKey, isPrizeDrop) => {
     const itemType = item.type || item.kind;
 
-    // Validação de prêmios
     if (isPrizeDrop) {
       const allowed = { first: 'trophy', second: 'silver-trophy', third: 'bronze-trophy' };
       if (itemType !== allowed[slotKey]) return;
@@ -111,43 +111,29 @@ const Ranking = ({ userId }) => {
 
     setSlots(prev => {
       const next = { ...prev, [targetKey]: item };
-      // Se o item veio de outro slot, faz o swap (troca)
       if (item.sourceSlot && item.sourceSlot !== targetKey) {
         next[item.sourceSlot] = oldItem;
       }
       return next;
     });
 
-    // Se o item veio da bancada (pool), remove ele de lá e devolve o antigo se houver
     if (!item.sourceSlot) {
-      removeItemFromPool(item);
-      if (oldItem) addItemBackToPool(oldItem);
-    }
-
-    setActiveSelection(null); // Limpa seleção após mover
-  };
-
-  const addItemBackToPool = (item) => {
-    if (!item) return;
-    setAvailableItems((prev) => {
-      const type = item.type || item.kind;
-      if (type === 'avatar') {
-        if (prev.avatars.some(a => a.id === item.id)) return prev;
-        return { ...prev, avatars: [...prev.avatars, { ...item, kind: 'avatar' }] };
+      setAvailableItems(prev => ({
+        avatars: prev.avatars.filter(a => a.id !== item.id),
+        prizes: prev.prizes.filter(p => p.id !== item.id),
+      }));
+      if (oldItem) {
+        setAvailableItems(prev => {
+            const type = oldItem.type || oldItem.kind;
+            if (type === 'avatar') return { ...prev, avatars: [...prev.avatars, { ...oldItem, kind: 'avatar' }] };
+            return { ...prev, prizes: [...prev.prizes, oldItem] };
+        });
       }
-      if (prev.prizes.some(p => p.id === item.id)) return prev;
-      return { ...prev, prizes: [...prev.prizes, item] };
-    });
+    }
+    setActiveSelection(null);
   };
 
-  const removeItemFromPool = (item) => {
-    setAvailableItems((prev) => ({
-      avatars: prev.avatars.filter((a) => a.id !== item.id),
-      prizes: prev.prizes.filter((p) => p.id !== item.id),
-    }));
-  };
-
-  // --- HANDLERS PARA DESKTOP (Drag & Drop) ---
+  // Handlers Desktop
   const handleDragStart = (e, item, sourceSlot = null) => {
     e.dataTransfer.setData('application/json', JSON.stringify({ ...item, sourceSlot }));
   };
@@ -157,35 +143,32 @@ const Ranking = ({ userId }) => {
     if (dragOverSlot !== slotKey) setDragOverSlot(slotKey);
   };
 
-  const handleDrop = (e, slotKey, isPrizeDrop = false) => {
+  const handleDrop = (e, slotKey, isPrizeDrop) => {
     e.preventDefault();
     setDragOverSlot(null);
     const raw = e.dataTransfer.getData('application/json');
-    if (!raw) return;
-    executeMove(JSON.parse(raw), slotKey, isPrizeDrop);
+    if (raw) executeMove(JSON.parse(raw), slotKey, isPrizeDrop);
   };
 
-  // --- HANDLERS PARA MOBILE (Click to Place) ---
+  // Handlers Mobile
   const handleItemClick = (item, sourceSlot = null) => {
-    // Se o item já está selecionado e clicamos nele de novo, cancela a seleção
-    if (activeSelection?.id === item.id) {
-      setActiveSelection(null);
-    } else {
-      setActiveSelection({ ...item, sourceSlot });
-    }
+    if (activeSelection?.id === item.id) setActiveSelection(null);
+    else setActiveSelection({ ...item, sourceSlot });
   };
 
   const handleSlotClick = (slotKey, isPrizeDrop) => {
-    if (activeSelection) {
-      executeMove(activeSelection, slotKey, isPrizeDrop);
-    }
+    if (activeSelection) executeMove(activeSelection, slotKey, isPrizeDrop);
   };
 
   const handleReturnItem = (e, slotKey) => {
-    e.stopPropagation(); // Impede que o clique no botão ative o slot
+    e.stopPropagation();
     const item = slots[slotKey];
     if (!item) return;
-    addItemBackToPool(item);
+    setAvailableItems(prev => {
+        const type = item.type || item.kind;
+        if (type === 'avatar') return { ...prev, avatars: [...prev.avatars, { ...item, kind: 'avatar' }] };
+        return { ...prev, prizes: [...prev.prizes, item] };
+    });
     setSlots(prev => ({ ...prev, [slotKey]: null }));
     setActiveSelection(null);
   };
@@ -200,7 +183,7 @@ const Ranking = ({ userId }) => {
   const orderedSlots = ['second', 'first', 'third'];
 
   return (
-    <main className="ranking-page">
+    <main className="ranking-page" onContextMenu={(e) => e.preventDefault()}>
       <section className="ranking-hero">
         <p className="ranking-kicker">WORLD CODE CUP • RANKING AO VIVO</p>
         <h1 className="neon-text-golden-ranking">Podium das Seleções</h1>
@@ -222,9 +205,9 @@ const Ranking = ({ userId }) => {
 
                   return (
                     <article key={slotKey} className={`podium-slot slot-${slotKey} ${dragOverSlot === slotKey ? 'drag-over' : ''}`}>
-                      {/* Avatar Slot */}
+                      {/* Círculo Avatar */}
                       <div
-                        className={`podium-circle podium-circle--avatar ${config.ringClass} ${slotKey === 'first' && championBounce ? 'champion-bounce' : ''} ${activeSelection && activeSelection.kind === 'avatar' && !avatarItem ? 'can-drop' : ''}`}
+                        className={`podium-circle podium-circle--avatar ${config.ringClass} ${slotKey === 'first' && championBounce ? 'champion-bounce' : ''} ${activeSelection?.kind === 'avatar' && !avatarItem ? 'can-drop' : ''}`}
                         onDragOver={(e) => handleDragOver(e, `${slotKey}-avatar`)}
                         onDrop={(e) => handleDrop(e, slotKey, false)}
                         onClick={() => handleSlotClick(slotKey, false)}
@@ -232,7 +215,7 @@ const Ranking = ({ userId }) => {
                         {avatarItem ? (
                           <>
                             <div className="podium-slot__avatar-content">
-                              <video src={avatarItem.webm} autoPlay loop muted playsInline />
+                              <video src={avatarItem.webm} autoPlay loop muted playsInline disablePictureInPicture onContextMenu={(e) => e.preventDefault()} />
                             </div>
                             <button type="button" className="mini-remove-btn" onClick={(e) => handleReturnItem(e, slotKey)}>×</button>
                           </>
@@ -244,9 +227,9 @@ const Ranking = ({ userId }) => {
                       <div className={`podium-slot__label ${config.labelClass}`}>{config.title}</div>
                       <div className="podium-slot__name">{avatarItem?.name || 'Aguardando'}</div>
 
-                      {/* Prize Slot */}
+                      {/* Círculo Prêmio */}
                       <div
-                        className={`podium-circle podium-circle--prize ${activeSelection && activeSelection.type && activeSelection.type !== 'avatar' && !prizeItem ? 'can-drop' : ''}`}
+                        className={`podium-circle podium-circle--prize ${activeSelection?.type && activeSelection.type !== 'avatar' && !prizeItem ? 'can-drop' : ''}`}
                         onDragOver={(e) => handleDragOver(e, `${slotKey}-prize`)}
                         onDrop={(e) => handleDrop(e, slotKey, true)}
                         onClick={() => handleSlotClick(slotKey, true)}
@@ -254,7 +237,7 @@ const Ranking = ({ userId }) => {
                         {prizeItem ? (
                           <>
                             <div className="podium-slot__prize-content">
-                              <video src={prizeItem.webm} autoPlay loop muted playsInline />
+                              <video src={prizeItem.webm} autoPlay loop muted playsInline disablePictureInPicture onContextMenu={(e) => e.preventDefault()} />
                             </div>
                             <button type="button" className="mini-remove-btn" onClick={(e) => handleReturnItem(e, `${slotKey}Prize`)}>×</button>
                           </>
@@ -282,8 +265,7 @@ const Ranking = ({ userId }) => {
             </div>
 
             <section className="ranking-board">
-                {/* ... conteúdo da pontuação geral igual ... */}
-                <div className="ranking-board__header">
+              <div className="ranking-board__header">
                 <h2>Pontuação Geral</h2>
                 <button className="ranking-reset" onClick={handleResetBoard}>Reset geral</button>
               </div>
@@ -292,7 +274,7 @@ const Ranking = ({ userId }) => {
                   <article className={`ranking-card accent-${team.accent}`} key={team.id}>
                     <div className="ranking-card__pos">#{i + 1}</div>
                     <div className="ranking-card__avatar">
-                      <video src={team.webm} autoPlay loop muted playsInline />
+                      <video src={team.webm} autoPlay loop muted playsInline disablePictureInPicture onContextMenu={(e) => e.preventDefault()} />
                     </div>
                     <div className="ranking-card__info">
                       <h3>{team.name}</h3>
@@ -321,7 +303,7 @@ const Ranking = ({ userId }) => {
                         onDragStart={(e) => handleDragStart(e, team)}
                         onClick={() => handleItemClick(team)}
                       >
-                        <div className="draggable-media"><video src={team.webm} autoPlay loop muted playsInline /></div>
+                        <div className="draggable-media"><video src={team.webm} autoPlay loop muted playsInline disablePictureInPicture onContextMenu={(e) => e.preventDefault()} /></div>
                         <span>{team.name}</span>
                       </div>
                     ))}
@@ -338,7 +320,7 @@ const Ranking = ({ userId }) => {
                         onDragStart={(e) => handleDragStart(e, p)}
                         onClick={() => handleItemClick(p)}
                       >
-                        <div className="draggable-media"><video src={p.webm} autoPlay loop muted playsInline /></div>
+                        <div className="draggable-media"><video src={p.webm} autoPlay loop muted playsInline disablePictureInPicture onContextMenu={(e) => e.preventDefault()} /></div>
                         <span>{p.label}</span>
                       </div>
                     ))}
