@@ -201,7 +201,7 @@
         Como o background-position está em 'top', o letreiro da imagem estará sempre 
         na mesma distância do topo do aparelho, seja no A16 ou no iPhone 12 Pro!
       */
-      top: 10.2rem; 
+      top: 11.5rem; 
     }
   }
 
@@ -215,7 +215,7 @@
 
     @include responsive(mobile) {
       // Fixado em rem acompanhando a proporção exata do bloco de cards no mobile
-      top: 23rem; 
+      top: 26rem; 
     }
   }
 }
@@ -246,8 +246,8 @@
 
   @include responsive(mobile) {
     font-size: 0.9rem;      // Tamanho ideal para leitura no celular sem quebrar linha
-    margin-top: 1rem;   
-    margin-bottom: 1.5rem;  // Espaço controlado entre o subtítulo e o topo dos Cards
+    margin-top: 6.5rem;  // Dá espaço para os GIFs trabalharem   
+    
     padding: 0 1rem; 
     left: 7%;  
   }
