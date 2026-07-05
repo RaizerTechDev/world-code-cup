@@ -246,7 +246,7 @@
 
   @include responsive(mobile) {
     font-size: 0.9rem;      // Tamanho ideal para leitura no celular sem quebrar linha
-    margin-top: 1rem;     // 🔧 MARGEM POSITIVA: Empurra o texto para baixo dos GIFs, fazendo ele aparecer!
+    margin-top: 1rem;   
     margin-bottom: 1.5rem;  // Espaço controlado entre o subtítulo e o topo dos Cards
     padding: 0 1rem; 
     left: 7%;  
