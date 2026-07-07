@@ -13,12 +13,12 @@ video {
   margin: 0;
   display: flex;
   flex-direction: column;
-  align-items: center; 
-  overflow-x: hidden; 
+  align-items: center;
+  overflow-x: hidden;
   box-sizing: border-box;
-  padding: 8rem 1.5rem 4rem; 
+  padding: 8rem 1.5rem 4rem;
   background: linear-gradient(rgba(0, 7, 10, 0.72), rgba(0, 7, 10, 0.88)),
-              url('../../assets/ranking/stadium-ranking.jpg') center/cover no-repeat fixed;
+    url('../../assets/ranking/stadium-ranking.webp') center/cover no-repeat fixed;
 
   @include responsive(mobile) {
     padding: 1.5rem 1rem 3rem;
@@ -36,7 +36,11 @@ video {
     font-weight: bold;
     font-size: 3rem;
     text-shadow: 0 0 0.8rem rgba($gold-glow, 0.6);
-    @include responsive(mobile) { font-size: 1.8rem; margin-top: 5rem; }
+
+    @include responsive(mobile) {
+      font-size: 1.8rem;
+      margin-top: 5rem;
+    }
   }
 
   .subtitle-text {
@@ -44,7 +48,11 @@ video {
     color: $white-line;
     opacity: 0.7;
     animation: twinkle 3s infinite alternate;
-    @include responsive(mobile) { font-size: 0.85rem; padding: 0 1rem; }
+
+    @include responsive(mobile) {
+      font-size: 0.85rem;
+      padding: 0 1rem;
+    }
   }
 }
 
@@ -56,30 +64,58 @@ video {
   border-radius: 1.2rem;
   padding: 1.5rem;
   border: 1px solid rgba(0, 229, 255, 0.2);
-  @include responsive(tablet) { padding: 1.2rem 0.8rem; }
+
+  @include responsive(tablet) {
+    padding: 1.2rem 0.8rem;
+  }
 }
 
 .ranking-stage__layout {
   display: grid;
-  grid-template-columns: 1fr 340px; 
+  grid-template-columns: 1fr 340px;
   gap: 1.5rem;
-  @include responsive(tablet) { display: flex; flex-direction: column; }
+
+  @include responsive(tablet) {
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 .podium-column {
-  @include responsive(tablet) { display: contents; }
+  @include responsive(tablet) {
+    display: contents;
+  }
 }
 
-.podium-wrap { @include responsive(tablet) { order: 1; } }
-.prizes-panel { @include responsive(tablet) { order: 2; margin-bottom: 1.5rem; } }
-.ranking-board { @include responsive(tablet) { order: 3; } }
+.podium-wrap {
+  @include responsive(tablet) {
+    order: 1;
+  }
+}
+
+.prizes-panel {
+  @include responsive(tablet) {
+    order: 2;
+    margin-bottom: 1.5rem;
+  }
+}
+
+.ranking-board {
+  @include responsive(tablet) {
+    order: 3;
+  }
+}
 
 .podium-grid {
   display: grid;
   grid-template-columns: 1fr 1.18fr 1fr;
   gap: 1.2rem;
   align-items: end;
-  @include responsive(mobile) { grid-template-columns: 1fr; gap: 1rem; }
+
+  @include responsive(mobile) {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
 }
 
 .podium-slot {
@@ -88,9 +124,17 @@ video {
   background: rgba(255, 255, 255, 0.01);
   border: 0.12rem dashed rgba(255, 255, 255, 0.1);
   border-radius: 1rem;
-  @include responsive(mobile) { min-height: 15rem; max-width: 320px; margin: 0 auto; }
 
-  &.slot-first { border-color: rgba($gold-glow, 0.3); min-height: 25rem; }
+  @include responsive(mobile) {
+    min-height: 15rem;
+    max-width: 320px;
+    margin: 0 auto;
+  }
+
+  &.slot-first {
+    border-color: rgba($gold-glow, 0.3);
+    min-height: 25rem;
+  }
 }
 
 .podium-circle {
@@ -107,8 +151,26 @@ video {
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 
-  &--avatar { width: 9.5rem; height: 9.5rem; @include responsive(mobile) { width: 8rem; height: 8rem; } }
-  &--prize { width: 4.5rem; height: 4.5rem; border-style: dashed; @include responsive(mobile) { width: 4rem; height: 4rem; } }
+  &--avatar {
+    width: 9.5rem;
+    height: 9.5rem;
+
+    @include responsive(mobile) {
+      width: 8rem;
+      height: 8rem;
+    }
+  }
+
+  &--prize {
+    width: 4.5rem;
+    height: 4.5rem;
+    border-style: dashed;
+
+    @include responsive(mobile) {
+      width: 4rem;
+      height: 4rem;
+    }
+  }
 
   &.can-drop {
     border-color: rgba(0, 229, 255, 0.6);
@@ -117,25 +179,43 @@ video {
   }
 }
 
-.podium-slot__avatar-content, .podium-slot__prize-content {
-  width: 100%; height: 100%; border-radius: 50%; overflow: hidden;
-  video { width: 100%; height: 100%; object-fit: cover; }
+.podium-slot__avatar-content,
+.podium-slot__prize-content {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+
+  video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 }
 
 .mini-remove-btn {
   position: absolute;
-  top: -4px; right: -4px;
-  width: 26px; height: 26px;
+  top: -4px;
+  right: -4px;
+  width: 26px;
+  height: 26px;
   background: #ff5c7a;
-  color: white; border-radius: 50%; border: 2px solid #030a0e;
-  font-weight: 900; cursor: pointer; z-index: 20;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+  color: white;
+  border-radius: 50%;
+  border: 2px solid #030a0e;
+  font-weight: 900;
+  cursor: pointer;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
 }
 
 .ranking-board {
   background: rgba(10, 16, 20, 0.8);
-  border-radius: 1rem; padding: 1.2rem;
+  border-radius: 1rem;
+  padding: 1.2rem;
   border: 1px solid rgba(0, 229, 255, 0.1);
 }
 
@@ -148,23 +228,69 @@ video {
 .ranking-card {
   display: grid;
   grid-template-columns: 2.5rem 3rem 1fr;
-  padding: 0.8rem; align-items: center;
+  padding: 0.8rem;
+  align-items: center;
   background: rgba(255, 255, 255, 0.03);
   border-left: 3px solid $neon-blue;
-  border-radius: 6px; position: relative;
+  border-radius: 6px;
+  position: relative;
 
-  &__avatar { width: 2.5rem; height: 2.5rem; border-radius: 50%; overflow: hidden; video { width: 100%; height: 100%; object-fit: cover; } }
-  &__bar { position: absolute; bottom: 0; left: 0; width: 100%; height: 3px; span { display: block; height: 100%; background: linear-gradient(90deg, $neon-blue, $gold-glow); } }
+  &__avatar {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    overflow: hidden;
+
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &__bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+
+    span {
+      display: block;
+      height: 100%;
+      background: linear-gradient(90deg, $neon-blue, $gold-glow);
+    }
+  }
 }
 
-.draggable-bench { display: flex; flex-direction: column; gap: 1.5rem; @include responsive(tablet) { flex-direction: row; flex-wrap: wrap; } }
-.draggable-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem; @include responsive(tablet) { grid-template-columns: repeat(auto-fill, minmax(75px, 1fr)); } }
+.draggable-bench {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
 
-.draggable-item, .podium-slot__swap-handle {
+.draggable-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+
+  @include responsive(tablet) {
+      display: grid;
+     grid-template-columns: repeat(4, 1fr);
+    gap: 0.6rem;
+ }
+}
+
+.draggable-item,
+.podium-slot__swap-handle {
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 8px; padding: 0.5rem; text-align: center; cursor: pointer; transition: all 0.2s;
-  
+  border-radius: 8px;
+  padding: 0.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+
   &.is-selected {
     border-color: $neon-blue !important;
     background: rgba(0, 229, 255, 0.2) !important;
@@ -172,15 +298,201 @@ video {
     box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
   }
 
-  .draggable-media { width: 100%; height: 3.5rem; video { width: 100%; height: 100%; object-fit: contain; } }
-  span { font-size: 0.65rem; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .draggable-media {
+    width: 100%;
+    height: 3.5rem;
+
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+
+  span {
+    font-size: 0.65rem;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin: 1.5rem 0;
+
+  button {
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    border: 1px solid rgba($neon-blue, 0.3);
+  }
+}
+
+.btn-auto-score {
+  background: rgba($neon-blue, 0.15);
+  color: $neon-blue;
+
+  &:hover {
+    background: rgba($neon-blue, 0.3);
+    transform: translateY(-2px);
+  }
+}
+
+.btn-reset-board {
+  background: rgba(255, 92, 122, 0.1);
+  color: #ff5c7a;
+  border-color: rgba(255, 92, 122, 0.3) !important;
+
+  &:hover {
+    background: rgba(255, 92, 122, 0.2);
+  }
+}
+
+.instruction-text {
+  font-size: 0.7rem;
+  color: rgba($neon-blue, 0.6);
+  text-transform: none;
+  margin-bottom: 0.8rem;
+  font-style: italic;
+}
+
+.mini-points-badge {
+  position: absolute;
+  bottom: 8px;
+  background: $gold-glow;
+  color: #000;
+  font-size: 0.7rem;
+  font-weight: 900;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* AJUSTES DO MODAL PARA GARANTIR QUE O BOTÃO APAREÇA */
+.modal-overlay {
+  position: fixed; 
+  inset: 0; 
+  background: rgba(0, 5, 8, 0.95); 
+  backdrop-filter: blur(10px);
+  z-index: 9999; 
+  display: grid; 
+  place-items: center;
+  padding: 1rem; // Espaço para não encostar na borda do celular
+}
+
+.modal-content {
+  background: #0a1116; 
+  border: 2px solid $neon-blue; 
+  border-radius: 1.5rem;
+  padding: 2rem; 
+  width: min(100%, 500px); 
+  box-shadow: 0 0 40px rgba(0, 229, 255, 0.2);
+  
+  // SOLUÇÃO PARA O BOTÃO NÃO SUMIR:
+  max-height: 90vh; // Não deixa o modal ser maior que a tela
+  overflow-y: auto; // Permite scroll se os inputs ocuparem muito espaço
+  display: flex;
+  flex-direction: column;
+
+  header {
+    display: flex; 
+    align-items: center; 
+    gap: 1rem; 
+    margin-bottom: 1.5rem;
+    flex-shrink: 0; // Impede o header de esmagar
+    
+    video { width: 60px; height: 60px; border-radius: 50%; border: 2px solid $neon-blue; }
+    h2 { color: #fff; font-size: 1.2rem; margin: 0; }
+  }
+}
+
+.rules-grid {
+  display: grid;
+  grid-template-columns: 1fr; // Uma coluna no mobile fica melhor
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  
+  @media (min-width: 480px) {
+    grid-template-columns: 1fr 1fr; // Duas colunas em telas maiores
+  }
+}
+
+.rule-input-group {
+  label { display: block; font-size: 0.75rem; color: $neon-blue; margin-bottom: 0.3rem; font-weight: bold; }
+  .input-wrapper {
+    position: relative;
+    input {
+      width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 6px; padding: 0.6rem; color: #fff; font-size: 1rem;
+      &:focus { border-color: $neon-blue; outline: none; }
+    }
+    .limit-info { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 0.6rem; color: rgba(255,255,255,0.3); }
+  }
+}
+
+.modal-footer {
+  margin-top: auto; // Empurra para o fundo
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0; // Garante que o rodapé não suma
+
+  .total-display { color: #fff; font-size: 0.9rem; span { color: $gold-glow; font-weight: bold; font-size: 1.2rem; } }
+  
+  .btn-close-modal { 
+    background: $neon-blue; 
+    color: #000; 
+    font-weight: 900; 
+    padding: 0.8rem 1.5rem; 
+    border: none; 
+    border-radius: 8px; 
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 229, 255, 0.3);
+    &:hover { filter: brightness(1.2); }
+  }
 }
 
 @keyframes selectionPulse {
-  0%, 100% { opacity: 0.8; }
-  50% { opacity: 1; }
+
+  0%,
+  100% {
+    opacity: 0.8;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }
 
-@keyframes twinkle { from { opacity: 0.4; } to { opacity: 0.8; } }
-@keyframes championBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-.champion-bounce { animation: championBounce 0.6s ease infinite; }
+@keyframes twinkle {
+  from {
+    opacity: 0.4;
+  }
+
+  to {
+    opacity: 0.8;
+  }
+}
+
+@keyframes championBounce {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.champion-bounce {
+  animation: championBounce 0.6s ease infinite;
+}

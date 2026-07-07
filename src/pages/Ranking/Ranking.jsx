@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import confetti from 'canvas-confetti';
 import './Ranking.scss';
 
-// Importação de Assets
+// ... (seus imports de assets permanecem iguais)
 import brazil from '../../assets/webm/brasil-avatar.webm';
 import argentina from '../../assets/webm/argentina-avatar.webm';
 import france from '../../assets/webm/france-avatar.webm';
@@ -12,21 +12,28 @@ import spain from '../../assets/webm/spain-avatar.webm';
 import japan from '../../assets/webm/japan-avatar.webm';
 import eua from '../../assets/webm/eua-avatar.webm';
 import morocco from '../../assets/webm/morocco-avatar.webm';
-
 import trophy from '../../assets/webm/trophy.webm';
 import silverTrophy from '../../assets/webm/silver-trophy.webm';
 import bronzeTrophy from '../../assets/webm/bronze-trophy.webm';
 
-const teams = [
-  { id: 1, name: 'Brasil', webm: brazil, accent: 'green', points: 128 },
-  { id: 2, name: 'Argentina', webm: argentina, accent: 'sky', points: 124 },
-  { id: 3, name: 'França', webm: france, accent: 'blue', points: 120 },
-  { id: 4, name: 'Portugal', webm: portugal, accent: 'red', points: 112 },
-  { id: 5, name: 'Espanha', webm: spain, accent: 'white', points: 110 },
-  { id: 6, name: 'Japão', webm: japan, accent: 'rose', points: 107 },
-  { id: 7, name: 'EUA', webm: eua, accent: 'crimson', points: 103 },
-  { id: 8, name: 'Marrocos', webm: morocco, accent: 'gold', points: 101 },
+const ruleDefinitions = [
+  { id: 1, name: "Tempo & Prorrogação", max: 10, min: 0 },
+  { id: 2, name: "Clean Code", max:25, min: 0 },
+  { id: 3, name: "Goleada de Testes", max: 30, min: 0 },
+  { id: 4, name: "Decisão por Pênaltis", max: 10, min: 0 },
+  { id: 5, name: "Cartão Vermelho (Anti-Cheat)", max: 0, min: -5 }
 ];
+
+const initialTeams = [
+  { id: 1, name: 'Brasil', webm: brazil, accent: 'green' },
+  { id: 2, name: 'Argentina', webm: argentina, accent: 'sky'},
+  { id: 3, name: 'França', webm: france, accent: 'blue' },
+  { id: 4, name: 'Portugal', webm: portugal, accent: 'red'},
+  { id: 5, name: 'Espanha', webm: spain, accent: 'white'},
+  { id: 6, name: 'Japão', webm: japan, accent: 'rose'},
+  { id: 7, name: 'EUA', webm: eua, accent: 'crimson'},
+  { id: 8, name: 'Marrocos', webm: morocco, accent: 'gold'},
+].map(team => ({ ...team, rules: Array(5).fill(0) })); // Inicializa as regras com 0
 
 const prizeItems = [
   { id: 'trophy', label: 'Troféu', webm: trophy, type: 'trophy' },
@@ -34,303 +41,235 @@ const prizeItems = [
   { id: 'bronze-trophy', label: 'Bronze', webm: bronzeTrophy, type: 'bronze-trophy' },
 ];
 
-const STORAGE_KEY = (userId) => `world-code-cup-ranking-state:${userId || 'guest'}`;
-const SAVE_DELAY = 150;
-
-const buildInitialState = (rankingData) => ({
-  slots: {
-    first: null, second: null, third: null,
-    firstPrize: null, secondPrize: null, thirdPrize: null,
-  },
-  availableItems: {
-    avatars: rankingData.map((team) => ({ ...team, kind: 'avatar' })),
-    prizes: prizeItems,
-  },
-});
+const STORAGE_KEY = (userId) => `wcc-ranking-data:${userId || 'guest'}`;
 
 const Ranking = ({ userId }) => {
-  const rankingData = useMemo(() => [...teams].sort((a, b) => b.points - a.points), []);
-  const initial = useMemo(() => buildInitialState(rankingData), [rankingData]);
-
-  const [availableItems, setAvailableItems] = useState(initial.availableItems);
-  const [slots, setSlots] = useState(initial.slots);
-  const [dragOverSlot, setDragOverSlot] = useState(null);
-  const [championBounce, setChampionBounce] = useState(false);
-  
-  // Estado para seleção via clique (Essencial para Mobile)
+  const [teamsData, setTeamsData] = useState(initialTeams);
+  const [slots, setSlots] = useState({ first: null, second: null, third: null, firstPrize: null, secondPrize: null, thirdPrize: null });
+  const [availableItems, setAvailableItems] = useState({ avatars: [], prizes: prizeItems });
   const [activeSelection, setActiveSelection] = useState(null);
+  const [editingTeamId, setEditingTeamId] = useState(null); // Mudamos para ID para ser reativo
+  const [championBounce, setChampionBounce] = useState(false);
 
-  const topScore = rankingData[0]?.points || 1;
+  // Encontra o time que está sendo editado dentro do array principal
+  const teamToEdit = teamsData.find(t => t.id === editingTeamId);
 
+  const calculateTotal = (rules) => rules.reduce((acc, val) => acc + val, 0);
+
+  const sortedRanking = useMemo(() => {
+    return [...teamsData].sort((a, b) => calculateTotal(b.rules) - calculateTotal(a.rules));
+  }, [teamsData]);
+
+  const topScore = calculateTotal(sortedRanking[0].rules) || 1;
+
+  useEffect(() => {
+    const saved = localStorage.getItem(STORAGE_KEY(userId));
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (parsed.teamsData) setTeamsData(parsed.teamsData);
+      if (parsed.slots) setSlots(parsed.slots);
+    }
+  }, [userId]);
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY(userId), JSON.stringify({ teamsData, slots }));
+    const busyIds = [slots.first?.id, slots.second?.id, slots.third?.id];
+    setAvailableItems(prev => ({
+      ...prev,
+      avatars: teamsData.filter(t => !busyIds.includes(t.id)).map(t => ({ ...t, kind: 'avatar' }))
+    }));
+  }, [teamsData, slots, userId]);
+
+  // Função para atualizar a regra de um time específico
+  const handleUpdateRule = (teamId, ruleIdx, value) => {
+    // Permite digitar o sinal de menos e apagar tudo
+    if (value === "-") return; 
+    const num = value === '' ? 0 : parseInt(value);
+    if (isNaN(num) && value !== '') return;
+
+    const def = ruleDefinitions[ruleIdx];
+    const validatedValue = Math.min(Math.max(num, def.min), def.max);
+
+    setTeamsData(prev => prev.map(t => {
+      if (t.id === teamId) {
+        const newRules = [...t.rules];
+        newRules[ruleIdx] = validatedValue;
+        return { ...t, rules: newRules };
+      }
+      return t;
+    }));
+  };
+
+  const generateAutoScores = () => {
+    setTeamsData(prev => prev.map(t => ({
+      ...t,
+      rules: ruleDefinitions.map(d => Math.floor(Math.random() * (d.max - d.min + 1)) + d.min)
+    })));
+  };
+
+  const executeMove = (item, slotKey, isPrizeDrop) => {
+    const itemType = item.type || item.kind;
+    if (isPrizeDrop) {
+      const allowed = { first: 'trophy', second: 'silver-trophy', third: 'bronze-trophy' };
+      if (itemType !== allowed[slotKey]) return;
+      if (slotKey === 'first') {
+        setChampionBounce(true);
+          confetti({ particleCount: 150, spread: 80, origin: { x: 0.3, y: 0.6 }, colors: ['#00e5ff', '#ffea00', '#00e676'] });
+    confetti({ particleCount: 150, spread: 80, origin: { x: 0.6, y: 0.6 }, colors: ['#00e5ff', '#ffea00', '#00e676'] });
+      }
+    } else if (itemType !== 'avatar') return;
+
+    const targetKey = isPrizeDrop ? `${slotKey}Prize` : slotKey;
+    setSlots(prev => ({ ...prev, [targetKey]: item }));
+    setActiveSelection(null);
+  };
+
+  const orderedSlots = ['second', 'first', 'third'];
   const slotConfig = {
     first: { title: '1º Lugar', ringClass: 'podium-slot__avatar--gold', labelClass: 'podium-slot__label--gold' },
     second: { title: '2º Lugar', ringClass: 'podium-slot__avatar--silver', labelClass: 'podium-slot__label--silver' },
     third: { title: '3º Lugar', ringClass: 'podium-slot__avatar--bronze', labelClass: 'podium-slot__label--bronze' },
   };
 
-  useEffect(() => {
-    try {
-      const key = STORAGE_KEY(userId);
-      const saved = localStorage.getItem(key);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        setSlots(parsed.slots || initial.slots);
-        setAvailableItems(parsed.availableItems || initial.availableItems);
-      }
-    } catch (e) {}
-  }, [userId, initial]);
-
-  useEffect(() => {
-    const key = STORAGE_KEY(userId);
-    const timer = setTimeout(() => {
-      localStorage.setItem(key, JSON.stringify({ slots, availableItems }));
-    }, SAVE_DELAY);
-    return () => clearTimeout(timer);
-  }, [slots, availableItems, userId]);
-
-  const triggerCelebration = () => {
-    setChampionBounce(true);
-    confetti({ particleCount: 150, spread: 80, origin: { x: 0.2, y: 0.6 }, colors: ['#00e5ff', '#ffea00', '#00e676'] });
-    confetti({ particleCount: 150, spread: 80, origin: { x: 0.8, y: 0.6 }, colors: ['#00e5ff', '#ffea00', '#00e676'] });
-  };
-
-  // Lógica de Movimento Unificada (PC e Celular)
-  const executeMove = (item, slotKey, isPrizeDrop) => {
-    const itemType = item.type || item.kind;
-
-    if (isPrizeDrop) {
-      const allowed = { first: 'trophy', second: 'silver-trophy', third: 'bronze-trophy' };
-      if (itemType !== allowed[slotKey]) return;
-      if (slotKey === 'first') triggerCelebration();
-    } else {
-      if (itemType !== 'avatar') return;
-    }
-
-    const targetKey = isPrizeDrop ? `${slotKey}Prize` : slotKey;
-    const oldItem = slots[targetKey];
-
-    setSlots(prev => {
-      const next = { ...prev, [targetKey]: item };
-      if (item.sourceSlot && item.sourceSlot !== targetKey) {
-        next[item.sourceSlot] = oldItem;
-      }
-      return next;
-    });
-
-    if (!item.sourceSlot) {
-      setAvailableItems(prev => ({
-        avatars: prev.avatars.filter(a => a.id !== item.id),
-        prizes: prev.prizes.filter(p => p.id !== item.id),
-      }));
-      if (oldItem) {
-        setAvailableItems(prev => {
-            const type = oldItem.type || oldItem.kind;
-            if (type === 'avatar') return { ...prev, avatars: [...prev.avatars, { ...oldItem, kind: 'avatar' }] };
-            return { ...prev, prizes: [...prev.prizes, oldItem] };
-        });
-      }
-    }
-    setActiveSelection(null);
-  };
-
-  // Handlers Desktop
-  const handleDragStart = (e, item, sourceSlot = null) => {
-    e.dataTransfer.setData('application/json', JSON.stringify({ ...item, sourceSlot }));
-  };
-
-  const handleDragOver = (e, slotKey) => {
-    e.preventDefault();
-    if (dragOverSlot !== slotKey) setDragOverSlot(slotKey);
-  };
-
-  const handleDrop = (e, slotKey, isPrizeDrop) => {
-    e.preventDefault();
-    setDragOverSlot(null);
-    const raw = e.dataTransfer.getData('application/json');
-    if (raw) executeMove(JSON.parse(raw), slotKey, isPrizeDrop);
-  };
-
-  // Handlers Mobile
-  const handleItemClick = (item, sourceSlot = null) => {
-    if (activeSelection?.id === item.id) setActiveSelection(null);
-    else setActiveSelection({ ...item, sourceSlot });
-  };
-
-  const handleSlotClick = (slotKey, isPrizeDrop) => {
-    if (activeSelection) executeMove(activeSelection, slotKey, isPrizeDrop);
-  };
-
-  const handleReturnItem = (e, slotKey) => {
-    e.stopPropagation();
-    const item = slots[slotKey];
-    if (!item) return;
-    setAvailableItems(prev => {
-        const type = item.type || item.kind;
-        if (type === 'avatar') return { ...prev, avatars: [...prev.avatars, { ...item, kind: 'avatar' }] };
-        return { ...prev, prizes: [...prev.prizes, item] };
-    });
-    setSlots(prev => ({ ...prev, [slotKey]: null }));
-    setActiveSelection(null);
-  };
-
-  const handleResetBoard = () => {
-    setSlots(initial.slots);
-    setAvailableItems(initial.availableItems);
-    setActiveSelection(null);
-    localStorage.removeItem(STORAGE_KEY(userId));
-  };
-
-  const orderedSlots = ['second', 'first', 'third'];
-
   return (
-    <main className="ranking-page" onContextMenu={(e) => e.preventDefault()}>
+    <main className="ranking-page">
       <section className="ranking-hero">
         <p className="ranking-kicker">WORLD CODE CUP • RANKING AO VIVO</p>
-        <h1 className="neon-text-golden-ranking">Podium das Seleções</h1>
-        <p className="subtitle-text">
-         Em tempo real e dinâmico. Selecione ou arraste os avatares e prêmios,
-          <span className="break-large">conforme a pontuação geral.</span>
-        </p>
+        <h1 className="neon-text-golden-ranking">Pódio das Seleções</h1>
+        <p className="subtitle-text">Gerencie a pontuação e posicione as seleções conforme o desempenho.</p>
+        <div className="hero-actions">
+          <button className="btn-auto-score" onClick={generateAutoScores}>✨ Gerar Scores</button>
+          <button className="btn-reset-board" onClick={() => { setSlots({ first: null, second: null, third: null, firstPrize: null, secondPrize: null, thirdPrize: null }); setTeamsData(initialTeams); }}>Limpar Tudo</button>
+        </div>
       </section>
 
       <section className="ranking-stage">
         <div className="ranking-stage__layout">
           <div className="podium-column">
-            <div className="podium-wrap">
-              <div className="podium-grid">
-                {orderedSlots.map((slotKey) => {
-                  const config = slotConfig[slotKey];
-                  const avatarItem = slots[slotKey];
-                  const prizeItem = slots[`${slotKey}Prize`];
+            <div className="podium-grid">
+              {orderedSlots.map((slotKey) => {
+                const config = slotConfig[slotKey];
+                const teamInSlot = slots[slotKey] ? teamsData.find(t => t.id === slots[slotKey].id) : null;
+                const prize = slots[`${slotKey}Prize`];
 
-                  return (
-                    <article key={slotKey} className={`podium-slot slot-${slotKey} ${dragOverSlot === slotKey ? 'drag-over' : ''}`}>
-                      {/* Círculo Avatar */}
-                      <div
-                        className={`podium-circle podium-circle--avatar ${config.ringClass} ${slotKey === 'first' && championBounce ? 'champion-bounce' : ''} ${activeSelection?.kind === 'avatar' && !avatarItem ? 'can-drop' : ''}`}
-                        onDragOver={(e) => handleDragOver(e, `${slotKey}-avatar`)}
-                        onDrop={(e) => handleDrop(e, slotKey, false)}
-                        onClick={() => handleSlotClick(slotKey, false)}
-                      >
-                        {avatarItem ? (
-                          <>
-                            <div className="podium-slot__avatar-content">
-                              <video src={avatarItem.webm} autoPlay loop muted playsInline disablePictureInPicture onContextMenu={(e) => e.preventDefault()} />
-                            </div>
-                            <button type="button" className="mini-remove-btn" onClick={(e) => handleReturnItem(e, slotKey)}>×</button>
-                          </>
-                        ) : (
-                          <div className="podium-slot__placeholder">{config.title.split(' ')[0]}</div>
-                        )}
-                      </div>
+                return (
+                  <article key={slotKey} className={`podium-slot slot-${slotKey}`}>
+                    <div
+                      className={`podium-circle podium-circle--avatar ${config.ringClass} ${slotKey === 'first' && championBounce ? 'champion-bounce' : ''} ${activeSelection?.kind === 'avatar' && !teamInSlot ? 'can-drop' : ''}`}
+                      onClick={() => activeSelection ? executeMove(activeSelection, slotKey, false) : teamInSlot && setEditingTeamId(teamInSlot.id)}
+                    >
+                      {teamInSlot ? (
+                        <>
+                          <div className="podium-slot__avatar-content"><video src={teamInSlot.webm} autoPlay loop muted playsInline /></div>
+                          <button className="mini-remove-btn" onClick={(e) => { e.stopPropagation(); setSlots(p => ({...p, [slotKey]: null})); }}>×</button>
+                          <div className="mini-points-badge">{calculateTotal(teamInSlot.rules)} pts</div>
+                        </>
+                      ) : <div className="podium-slot__placeholder">{config.title.split(' ')[0]}</div>}
+                    </div>
+                    <div className={`podium-slot__label ${config.labelClass}`}>{config.title}</div>
+                    <div className="podium-slot__name">{teamInSlot?.name || 'Vago'}</div>
 
-                      <div className={`podium-slot__label ${config.labelClass}`}>{config.title}</div>
-                      <div className="podium-slot__name">{avatarItem?.name || 'Aguardando'}</div>
-
-                      {/* Círculo Prêmio */}
-                      <div
-                        className={`podium-circle podium-circle--prize ${activeSelection?.type && activeSelection.type !== 'avatar' && !prizeItem ? 'can-drop' : ''}`}
-                        onDragOver={(e) => handleDragOver(e, `${slotKey}-prize`)}
-                        onDrop={(e) => handleDrop(e, slotKey, true)}
-                        onClick={() => handleSlotClick(slotKey, true)}
-                      >
-                        {prizeItem ? (
-                          <>
-                            <div className="podium-slot__prize-content">
-                              <video src={prizeItem.webm} autoPlay loop muted playsInline disablePictureInPicture onContextMenu={(e) => e.preventDefault()} />
-                            </div>
-                            <button type="button" className="mini-remove-btn" onClick={(e) => handleReturnItem(e, `${slotKey}Prize`)}>×</button>
-                          </>
-                        ) : (
-                          <div className="podium-slot__prize-placeholder">+</div>
-                        )}
-                      </div>
-
-                      <div className="podium-slot__actions">
-                        {avatarItem && (
-                          <div 
-                            className={`podium-slot__swap-handle ${activeSelection?.id === avatarItem.id ? 'is-selected' : ''}`} 
-                            draggable 
-                            onDragStart={(e) => handleDragStart(e, avatarItem, slotKey)}
-                            onClick={() => handleItemClick(avatarItem, slotKey)}
-                          >
-                            Mover Seleção
-                          </div>
-                        )}
-                      </div>
-                    </article>
-                  );
-                })}
-              </div>
+                    <div className={`podium-circle podium-circle--prize ${activeSelection?.type && activeSelection.type !== 'avatar' && !prize ? 'can-drop' : ''}`}
+                         onClick={() => activeSelection && executeMove(activeSelection, slotKey, true)}>
+                      {prize ? (
+                        <>
+                          <div className="podium-slot__prize-content"><video src={prize.webm} autoPlay loop muted playsInline /></div>
+                          <button className="mini-remove-btn" onClick={(e) => { e.stopPropagation(); setSlots(p => ({...p, [`${slotKey}Prize`]: null})); }}>×</button>
+                        </>
+                      ) : <div className="podium-slot__prize-placeholder">+</div>}
+                    </div>
+                  </article>
+                );
+              })}
             </div>
 
             <section className="ranking-board">
-              <div className="ranking-board__header">
-                <h2>Pontuação Geral</h2>
-                <button className="ranking-reset" onClick={handleResetBoard}>Reset geral</button>
-              </div>
               <div className="ranking-list">
-                {rankingData.map((team, i) => (
-                  <article className={`ranking-card accent-${team.accent}`} key={team.id}>
+                {sortedRanking.map((team, i) => (
+                  <article className={`ranking-card accent-${team.accent}`} key={team.id} onClick={() => setEditingTeamId(team.id)}>
                     <div className="ranking-card__pos">#{i + 1}</div>
-                    <div className="ranking-card__avatar">
-                      <video src={team.webm} autoPlay loop muted playsInline disablePictureInPicture onContextMenu={(e) => e.preventDefault()} />
-                    </div>
-                    <div className="ranking-card__info">
-                      <h3>{team.name}</h3>
-                      <p>{team.points} pontos</p>
-                    </div>
-                    <div className="ranking-card__bar">
-                      <span style={{ width: `${(team.points / topScore) * 100}%` }} />
-                    </div>
+                    <div className="ranking-card__avatar"><video src={team.webm} autoPlay loop muted playsInline /></div>
+                    <div className="ranking-card__info"><h3>{team.name}</h3><p>{calculateTotal(team.rules)} pts</p></div>
+                    <div className="ranking-card__bar"><span style={{ width: `${Math.max(0, (calculateTotal(team.rules) / topScore) * 100)}%` }} /></div>
+                    <button className="btn-edit-small">✎</button>
                   </article>
                 ))}
               </div>
             </section>
           </div>
 
-          <aside className="prizes-panel">
-            <div className="prizes-panel__sticky">
-              <div className="draggable-bench">
-                <div className="draggable-group">
-                  <h3>Avatares</h3>
-                  <div className="draggable-row">
-                    {availableItems.avatars.map((team) => (
-                      <div 
-                        key={team.id} 
-                        className={`draggable-item draggable-item--${team.accent} ${activeSelection?.id === team.id ? 'is-selected' : ''}`} 
-                        draggable 
-                        onDragStart={(e) => handleDragStart(e, team)}
-                        onClick={() => handleItemClick(team)}
-                      >
-                        <div className="draggable-media"><video src={team.webm} autoPlay loop muted playsInline disablePictureInPicture onContextMenu={(e) => e.preventDefault()} /></div>
-                        <span>{team.name}</span>
-                      </div>
-                    ))}
-                  </div>
+           <aside className="prizes-panel">
+            <div className="draggable-bench">
+              <div className="draggable-group">
+                <h3>Seleções</h3>
+                <p className="instruction-text"> Toque para avatar e pódio</p>
+                <div className="draggable-row">
+                  {availableItems.avatars.map((team) => (
+                    <div key={team.id} 
+                         className={`draggable-item ${activeSelection?.id === team.id ? 'is-selected' : ''}`} 
+                         draggable onDragStart={(e) => handleUpdateRule(e, team)}
+                         onClick={() => setActiveSelection(team)}>
+                      <div className="draggable-media"><video src={team.webm} autoPlay loop muted playsInline /></div>
+                      <span>{team.name}</span>
+                      <small>{calculateTotal(team.rules)} pts</small>
+                    </div>
+                  ))}
                 </div>
-                <div className="draggable-group">
-                  <h3>Prêmios</h3>
-                  <div className="draggable-row">
-                    {availableItems.prizes.map((p) => (
-                      <div 
-                        key={p.id} 
-                        className={`draggable-item ${activeSelection?.id === p.id ? 'is-selected' : ''}`} 
-                        draggable 
-                        onDragStart={(e) => handleDragStart(e, p)}
-                        onClick={() => handleItemClick(p)}
-                      >
-                        <div className="draggable-media"><video src={p.webm} autoPlay loop muted playsInline disablePictureInPicture onContextMenu={(e) => e.preventDefault()} /></div>
-                        <span>{p.label}</span>
-                      </div>
-                    ))}
-                  </div>
+              </div>
+
+              <div className="draggable-group">
+                <h3>Prêmios</h3>
+                <p className="instruction-text"> Toque para prêmio e pódio</p>
+                <div className="draggable-row">
+                  {availableItems.prizes.map((p) => (
+                    <div key={p.id} 
+                         className={`draggable-item ${activeSelection?.id === p.id ? 'is-selected' : ''}`} 
+                         draggable onDragStart={(e) => handleDragStart(e, p)}
+                         onClick={() => setActiveSelection(p)}>
+                      <div className="draggable-media"><video src={p.webm} autoPlay loop muted playsInline /></div>
+                      <span>{p.label}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
           </aside>
         </div>
       </section>
+
+      {/* MODAL CORRIGIDO */}
+      {teamToEdit && (
+        <div className="modal-overlay" onClick={() => setEditingTeamId(null)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <header>
+              <video src={teamToEdit.webm} autoPlay loop muted playsInline />
+              <div>
+                <h2>{teamToEdit.name}</h2>
+                <p>Critérios Técnicos</p>
+              </div>
+            </header>
+            <div className="rules-grid">
+              {teamToEdit.rules.map((val, idx) => (
+                <div key={idx} className={`rule-input-group ${idx === 4 ? 'is-penalty' : ''}`}>
+                  <label>{ruleDefinitions[idx].name}</label>
+                  <div className="input-wrapper">
+                    <input 
+                      type="number" 
+                      value={val} 
+                      onChange={e => handleUpdateRule(teamToEdit.id, idx, e.target.value)}
+                    />
+                    <span className="limit-info">{ruleDefinitions[idx].min}/{ruleDefinitions[idx].max}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="modal-footer">
+              <div className="total-display">TOTAL: <span>{calculateTotal(teamToEdit.rules)} pts</span></div>
+              <button className="btn-close-modal" onClick={() => setEditingTeamId(null)}>Confirmar</button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 };
