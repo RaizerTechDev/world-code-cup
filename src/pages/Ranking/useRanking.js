@@ -56,21 +56,30 @@ export const useRanking = (userId, initialTeams) => {
     return teamsData.filter(t => !busyIds.includes(t.id)).map(t => ({ ...t, kind: 'avatar' }));
   }, [teamsData, slots]);
 
-  const handleUpdateRule = (teamId, ruleIdx, value) => {
-    // Permite o campo ficar vazio ou apenas com o sinal de menos para o usuário conseguir digitar
-    if (value === "" || value === "-") {
-      updateTeamRule(teamId, ruleIdx, value);
-      return;
-    }
+  // Função para atualizar a regra de um time específico, garantindo que o valor esteja dentro dos limites definidos
+ const handleUpdateRule = (teamId, ruleIdx, value) => {
+  // Se for o botão, o valor já vem como número. 
+  // Se for o input, vem como string do evento.
+  let num = (typeof value === 'string') ? parseInt(value) : value;
 
-    const num = parseInt(value);
-    if (isNaN(num)) return;
+  // Permite campo vazio para digitação
+  if (value === "" || value === "-") {
+    updateTeamRule(teamId, ruleIdx, value);
+    return;
+  }
 
-    const def = ruleDefinitions[ruleIdx];
-    // 2. Valida os limites lógicos (não deixa passar de 30 ou ser menor que -5)
-    const validatedValue = Math.min(Math.max(num, def.min), def.max);
-    updateTeamRule(teamId, ruleIdx, validatedValue);
-  };
+  // 
+  if (isNaN(num)) return;
+
+  // Garante que o valor esteja dentro dos limites definidos na regra
+  const def = ruleDefinitions[ruleIdx];
+
+  // TRAVA LÓGICA: Não deixa passar do máximo nem do mínimo
+  const validatedValue = Math.min(Math.max(num, def.min), def.max);
+
+  // Atualiza o estado com o valor validado
+  updateTeamRule(teamId, ruleIdx, validatedValue);
+};
 
   // Função auxiliar para atualizar o array de regras no estado
   const updateTeamRule = (teamId, ruleIdx, newValue) => {

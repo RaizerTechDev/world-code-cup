@@ -463,6 +463,70 @@
   }
 }
 
+.stepper-control {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 0.3rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  .step-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    border: none;
+    background: rgba($neon-blue, 0.2);
+    color: $neon-blue;
+    font-size: 1.4rem;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+
+    &:hover {
+      background: $neon-blue;
+      color: #000;
+    }
+
+    &:active {
+      transform: scale(0.9);
+    }
+  }
+
+  input {
+    flex: 1;
+    background: transparent !important;
+    border: none !important;
+    text-align: center;
+    font-size: 1.2rem;
+    color: #fff;
+    width: 50px;
+    padding: 0 !important;
+  }
+}
+
+// Estilo para o Cartão Vermelho (Negativo)
+.is-penalty {
+  .step-btn {
+    background: rgba(#ff5c7a, 0.2);
+    color: #ff5c7a;
+    &:hover { background: #ff5c7a; color: #fff; }
+  }
+  .stepper-control { border-color: rgba(#ff5c7a, 0.3); }
+}
+
+.limit-label {
+  display: block;
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.3);
+  margin-top: 0.3rem;
+  text-align: center;
+}
+
 @keyframes selectionPulse {
 
   0%,

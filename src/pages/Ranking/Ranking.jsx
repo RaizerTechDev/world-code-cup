@@ -159,34 +159,61 @@ const Ranking = ({ userId }) => {
         </div>
       </section>
 
-      {teamToEdit && (
-        <div className="modal-overlay" onClick={() => setEditingTeamId(null)}>
-          <div className="modal-content" onClick={e => e.stopPropagation()}>
-            <header>
-              <video src={teamToEdit.webm} autoPlay loop muted playsInline />
-              <div>
-                <h2>{teamToEdit.name}</h2>
-                <p>Critérios de Avaliação</p>
-              </div>
-            </header>
-            <div className="rules-grid">
-              {teamToEdit.rules.map((val, idx) => (
-                <div key={idx} className={`rule-input-group ${idx === 4 ? 'is-penalty' : ''}`}>
-                  <label>{ruleDefinitions[idx].name}</label>
-                  <div className="input-wrapper">
-                    <input type="number" value={val} onChange={e => handleUpdateRule(teamToEdit.id, idx, e.target.value)} />
-                    <span className="limit-info">{ruleDefinitions[idx].min}/{ruleDefinitions[idx].max}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="modal-footer">
-              <div className="total-display">TOTAL: <span>{calculateTotal(teamToEdit.rules)} pts</span></div>
-              <button className="btn-close-modal" onClick={() => setEditingTeamId(null)}>Confirmar</button>
-            </div>
-          </div>
+      {/* MODAL COM CONTROLES DE + E - */}
+{teamToEdit && (
+  <div className="modal-overlay" onClick={() => setEditingTeamId(null)}>
+    <div className="modal-content" onClick={e => e.stopPropagation()}>
+      <header>
+        <video src={teamToEdit.webm} autoPlay loop muted playsInline />
+        <div>
+          <h2>{teamToEdit.name}</h2>
+          <p>Critérios Técnicos</p>
         </div>
-      )}
+      </header>
+
+      <div className="rules-grid">
+        {teamToEdit.rules.map((val, idx) => (
+          <div key={idx} className={`rule-input-group ${idx === 4 ? 'is-penalty' : ''}`}>
+            <label>{ruleDefinitions[idx].name}</label>
+            
+            <div className="stepper-control">
+              {/* BOTÃO DE MENOS */}
+              <button 
+                className="step-btn" 
+                onClick={() => handleUpdateRule(teamToEdit.id, idx, Number(val) - 1)}
+              >
+                −
+              </button>
+
+              <input 
+                type="text" 
+                inputMode="numeric" 
+                value={val} 
+                onChange={e => handleUpdateRule(teamToEdit.id, idx, e.target.value)}
+              />
+
+              {/* BOTÃO DE MAIS */}
+              <button 
+                className="step-btn" 
+                onClick={() => handleUpdateRule(teamToEdit.id, idx, Number(val) + 1)}
+              >
+                +
+              </button>
+            </div>
+            <span className="limit-label">
+              Limites: {ruleDefinitions[idx].min} a {ruleDefinitions[idx].max}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      <div className="modal-footer">
+        <div className="total-display">TOTAL: <span>{calculateTotal(teamToEdit.rules)} pts</span></div>
+        <button className="btn-confirm" onClick={() => setEditingTeamId(null)}>Confirmar</button>
+      </div>
+    </div>
+  </div>
+)}
     </main>
   );
 };
