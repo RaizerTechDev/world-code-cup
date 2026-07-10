@@ -209,7 +209,7 @@ const Ranking = ({ userId }) => {
 
       <div className="modal-footer">
         <div className="total-display">TOTAL: <span>{calculateTotal(teamToEdit.rules)} pts</span></div>
-        <button className="btn-confirm" onClick={() => setEditingTeamId(null)}>Confirmar</button>
+        <button className="btn-close-modal" onClick={() => setEditingTeamId(null)}>Confirmar</button>
       </div>
     </div>
   </div>
