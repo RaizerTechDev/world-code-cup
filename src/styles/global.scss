@@ -1,4 +1,11 @@
-@use '../../styles/variables.scss' as *;
+@use 'variables.scss' as *;
+
+// Global para vídeos não interferirem no clique
+video {
+  pointer-events: none; // Permite que o clique passe para a DIV pai
+  -webkit-touch-callout: none;
+  user-select: none;
+}
 
 * {
   margin: 0;
@@ -31,22 +38,4 @@ button:focus-visible {
   outline-offset: 0.3rem;
 }
 
-// ♿ Acessibilidade: Desativa ou suaviza animações se o usuário preferir menos movimento
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-delay: 0s !important;
-    animation-duration: 0s !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0s !important;
-    scroll-behavior: auto !important;
-  }
 
-  // Para os GIFs da Home não ficarem piscando estáticos de forma estranha
-  .ball-gif, .player-gif {
-    display: none !important; // Remove distrações visuais móveis
-  }
-
-  .home::before, .home::after {
-    display: none !important; // Remove as linhas correndo em alta velocidade
-  }
-}

@@ -21,23 +21,21 @@ const Regulamento = () => {
             {/* 🥈 2º Lugar */}
             <div className="podium-card silver">
               <h3>2° LUGAR 🥈</h3>
-              <p className="reward-title">Troféu / Medalha Prata Cyber</p>
-              <span className="reward-sub">Medalha Prata Cyber</span>
+              <p className="reward-title">Troféu Prata Cyber
+                </p>             
             </div>
 
             {/* 🏆 1º Lugar */}
             <div className="podium-card gold">
               <div className="glow-effect"></div>
               <h3>1° LUGAR 🏆</h3>
-              <p className="reward-title">Troféu Grand Master</p>
-              <span className="reward-sub">Troféu Grand Master</span>
+              <p className="reward-title">Troféu Grand Master</p>              
             </div>
 
             {/* 🥉 3º Lugar */}
             <div className="podium-card bronze">
               <h3>3° LUGAR 🥉</h3>
-              <p className="reward-title">Medalha Bronze Tech</p>
-              <span className="reward-sub">Medalha Bronze Tech</span>
+              <p className="reward-title">Troféu Bronze Tech</p>             
             </div>
 
           </div>

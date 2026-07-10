@@ -85,7 +85,7 @@
   // 📱 Mobile (Ajusta tamanho e injeta o feedback de toque idêntico ao hover)
   @include responsive(mobile) {
     padding: 0.4rem 0.8rem;
-    font-size: 0.7rem;
+    font-size: 0.6rem;
 
     /* 🪄 O SEGREDO PRO MOBILE: O ':active' simula o clique físico do touch instantâneo 
        aplicando a mesma virada de cor do notebook sem deixar o botão travado aceso. */
@@ -104,11 +104,19 @@
 }
   .header__logo {
     color: #ffffff;
-    font-size: 1.6rem;
+    font-size: 1.4rem;
     font-weight: 800;
     text-decoration: none;
     text-shadow: 0 0 0.8rem $neon-blue;
     span { color: $neon-blue; }
+    cursor: pointer;
+
+     // Efeito de brilho ao passar o mouse
+      &:hover, &:focus {
+        color: $cyber-blue-glow;
+        text-shadow: 0 0 1rem $white-line;
+        outline: none;
+      }
   }
 
   .header__nav ul {

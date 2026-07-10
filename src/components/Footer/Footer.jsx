@@ -17,7 +17,7 @@ const Footer = () => {
       </div>
 
       {/* Texto depois -> vai para a direita */}
-      <p className="footer__text">© 2026 World Code Cup - Desenvolvido por Rafael</p>
+      <p className="footer__text">© 2026 World Code Cup - Desenvolvido por Rafael Raizer</p>
     </footer>
   );
 };

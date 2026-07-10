@@ -1,7 +1,7 @@
 @use "../../styles/variables.scss" as *;
 
 .home {
-  min-height: 100vh;  
+  min-height: 100vh;
   background-image: url("../../assets/stadium-night.webp");
   background-size: cover;
   background-position: center;
@@ -9,250 +9,202 @@
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
   align-items: center;
-  padding: 2rem;
-  padding-top: 18rem;
-
-   @include responsive(tablet) {
+  position: relative;
+  padding-top: 12rem;
+  
+  // Ajuste do fundo para Mobile/Tablet para manter o letreiro visível
+  @include responsive(tablet) {
     background-position: center top;
-    background-size: 115% 100.1%; 
-    background-repeat: no-repeat;
-    padding-top: 0;
+    background-size: 120% 100%;
+     padding-top: 0rem;
   }
 
-  // 📱 breakpoint para Celulares
   @include responsive(mobile) {
-    background-position: center 0%;
-    background-size: 125% 100.1%;
-    background-repeat: no-repeat;
-    padding-top: 0;
+    background-size: 125% 100%;
+    background-position: center top;
+     padding-top: 6rem;
   }
 
   .home__overlay {
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.25);
     z-index: 1;
   }
-  
-  .home__content {
-    z-index: 2;
-    text-align: center;
-    max-width: 1200px;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-    margin-top: 28vh;
+}
 
-    @include responsive(tablet) { margin-top: 14vh; }
-    @include responsive(mobile) { margin-top: 1rem; }
+.home__content {
+  z-index: 10;
+  text-align: center;
+  max-width: 1200px;
+  width: 100%;
+  height: 100vh; // Ocupa a tela toda para distribuir itens acima/abaixo do logo da imagem
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+  // Lógica de inversão: No Desktop Subtítulo embaixo, no Mobile/Tablet Subtítulo em cima
+  justify-content: flex-end; // Desktop: Empurra tudo para baixo do logo
+  padding-bottom: 5vh;
+
+  @include responsive(tablet) {
+    justify-content: space-between; // Tablet: Subtítulo no topo, Cards no fundo
+    padding: 12vh 0 8vh;
   }
 
-  // Estrelas no fundo
-  .stars {
+  @include responsive(mobile) {
+    justify-content: space-between;
+    padding: 10vh 0 5vh;
+  }
+}
+
+// --- LINHAS (Acima e Abaixo do Título da Imagem) ---
+.line-field {
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: rgba($white-line, 0.6);
+  z-index: 2;
+  pointer-events: none;
+  animation: moveLines 8s linear infinite;
+}
+
+.line-top {
+  top: 15%; // Acima do "World"
+  @include responsive(tablet) { top: 20%; }
+
+}
+
+.line-bottom {
+  top: 50%; // Abaixo do "Cup"
+  @include responsive(tablet) { top: 49%; }
+  @include responsive(mobile) { top: 48%; }
+}
+
+// --- ESTRELAS ---
+.stars {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+
+  &::before, &::after {
+    content: "✨✨✨✨✨";
     position: absolute;
-    inset: 0; // Garante que cobre o fundo inteiro
-    background: transparent;
-    z-index: 0;
-    pointer-events: none;
+    animation: twinkle 3s infinite alternate;
+  }
 
-    &::before,
-    &::after {
-      content: "✨✨✨✨✨";
-      position: absolute;
-      top: 22%;
-      left: 10%;
-      font-size: 1.2rem;
-      color: #fff;
-      opacity: 0.7;
-      animation: twinkle 3s infinite alternate;
-    }
+  // Estrelas em cima do título (Desktop) ou em cima do texto (Mobile)
+  &::before {
+    top: 12%;
+    left: 5%;
+    font-size: 1.2rem;
 
-    &::after {
-      top: 74%;
-      left: 85%;
-      font-size: 1rem;
-      opacity: 0.5;
-    }
+    @include responsive(tablet) { top: 12%; left: 3%; }
+  }
 
-    // 📱 Se você quiser apenas ajustar a posição delas ou sumir com um bloco no mobile para não poluir:
+  // Estrelas abaixo da tela do computador da imagem
+  &::after {
+    top: 53%;
+    right: 12%;
+    font-size: 1rem;
+
     @include responsive(tablet) {
-      &::after {
-        display: none; // Esconde o segundo bloco de estrelas em telas menores para evitar repetição excessiva
-      }
-      &::before {
-        top: 12%; // Sobe o bloco principal para ficar perto do topo no tablet/celular
-        left: 5%;
-      }
-    }
-
-    @include responsive(mobile) {
-      &::before {
-        top: 6rem; 
-        font-size: 0.9rem; 
-      }
-    }
+       top: 51%; 
+       right: 5%;
+      }   
   }
+}
 
-  @keyframes twinkle {
-    0% {
-      opacity: 0.3;
-      transform: scale(0.9);
-    }
-    100% {
-      opacity: 1;
-      transform: scale(1.1);
-    }
-  }
-
-
-  // --- ANIMAÇÃO DA BOLA (WEBM) ---
-  .ball-container {
+// --- JOGADOR (PLAYER) ---
+.player-container {
     position: absolute;
-    top: 5.5rem;
-    width: 8rem; // Um pouco maior que o GIF para aproveitar o WebM
-    height: 8rem;
-    z-index: 3;
-    pointer-events: none;
-    animation: moveBall 12s linear infinite;
-
-    .ball-webm {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
-
-    @include responsive(tablet) { top: 36rem; width: 6rem; height: 6rem; }
-    @include responsive(mobile) { top: 32rem; width: 5.5rem; height: 5.5rem; }
-  }
-
-  // --- ANIMAÇÃO DO JOGADOR (WEBM) ---
-  .player-container {
-    position: absolute;
-    top: -19rem;
-    right: -2%;
-
-    width: 12rem;
-    height: 12rem;
     z-index: 4;
     pointer-events: none;
+    top: -3%; 
+    right: 7%;
+
+    // Largura proporcional à largura da tela
+    width: clamp(8rem, 15vw, 13rem); 
+    height: auto;
 
     .player-webm {
       width: 100%;
       height: 100%;
-      object-fit: contain;
+      object-fit: contain;    
     }
 
-    @include responsive(tablet) { top: 4rem; right: 3%; width: 9rem; height: 9rem; }
-    @include responsive(mobile) { top: 10rem; right: -3rem; width: 8rem; height: 8rem; }    
-  }
-
-  // KEYFRAMES MANTIDOS
-  @keyframes moveBall {
-    0% { left: 110%; transform: rotate(0deg); }
-    100% { left: -15rem; transform: rotate(-360deg); }
-  }
-
-  // --- CARDS ---
-  .cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
-    gap: 2rem;
-    margin-top: 3rem;
-    width: 100%;
-    max-width: 900px;
-    z-index: 5;
-
-    @include responsive(tablet) { 
-      grid-template-columns: 1fr; 
-      max-width: 24rem; 
-      margin-top: 22rem; 
+     @include responsive(tablet) { 
+      top: 21%; // Ajuste para o enquadramento do iPad
+      right: 0; 
+      width: 10rem; 
     }
-    @include responsive(mobile) { 
-      grid-template-columns: 1fr; 
-      margin-top: 19rem; 
-      max-width: 22rem; 
-    }
-  }
+    
+    @include responsive(mobile) {       
+      top: 15%; 
+      left: 70%;
+      width: 8.5rem; 
+    } 
+}
 
-  // --- LINHAS E ESTRELAS MANTIDOS CONFORME SEU CÓDIGO ---
-  .line-field {
-    position: absolute;
-    width: 100%;
-    height: 0.2rem;
-    background: $white-line;
-    z-index: 2;
-    animation: moveLines 6s linear infinite;
+
+// --- BOLA (Entre os Cards) ---
+.ball-container {
+  position: absolute;
+  z-index: 15;
+  width: clamp(4rem, 10vw, 6rem);
+  height: auto;  
+  top: 55.7%; 
+  left: 50%;
+  transform: translateX(-50%); // Mantém centralizada horizontalmente
+  
+  animation: moveBall 12s linear infinite;
+
+  @include responsive(tablet) { 
+    top: 55%; 
+    width: 5rem; 
   }
   
-  .line-top {
-    // Notebooks e Macbooks
-    top: 28%; 
-    
-    @include responsive(tablet) {
-      top: 23%; // Alinhamento do iPad Mini
-    }
-
-    @include responsive(mobile) {
-      /* Em vez de % ou vh, fixamos em rem a partir do topo do celular.
-        Como o background-position está em 'top', o letreiro da imagem estará sempre 
-        na mesma distância do topo do aparelho, seja no A16 ou no iPhone 12 Pro!
-      */
-      top: 11.5rem; 
-    }
+  @include responsive(mobile) { 
+    // Ajuste para ficar logo acima dos cards no celular
+    top: 48%; 
+    width: 4.5rem; 
   }
 
-  .line-bottom {
-    // Notebooks e Macbooks
-    top: 72%; 
-
-    @include responsive(tablet) {
-      top: 52%;
-    }
-
-    @include responsive(mobile) {
-      // Fixado em rem acompanhando a proporção exata do bloco de cards no mobile
-      top: 26rem; 
-    }
+  video { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: contain; 
   }
 }
 
-// Mantém o keyframe clássico que arrasta as linhas que você já usava
-@keyframes moveLines {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
-}
-
+// --- TEXTO (SUBTÍTULO) ---
 .fade-subtitle {
   position: relative;
-  display: inline-block;
-  cursor: pointer;
-  font-size: 1.9rem;
+  z-index: 20;
+  font-size: clamp(1rem, 2vw, 1.9rem);
+  font-weight: 800;
   color: $white-line;
-  top: 3.6rem;
-  margin-bottom: 1.8rem; 
-   opacity: 0.7;
-    animation: twinkle 3s infinite alternate;
- 
+  text-shadow: 0 0 1rem rgba($neon-blue, 0.5);
+  animation: twinkle 3s infinite alternate;
+
+  // No Desktop fica após o logo da imagem. No mobile, usamos 'order' ou o flex do content.
+  margin: 0 auto;
 
   @include responsive(tablet) {
-    font-size: 1.5rem; // Diminui a fonte do texto para não estourar a tela do celular
-    top: 0; // Dá espaço para os GIFs trabalharem
-    margin-bottom: 2rem;
-  }
+     order: -1; 
+     margin-top: 2rem; 
+     font-size: 1.2rem; 
+    }
 
-  @include responsive(mobile) {
-    font-size: 0.9rem;      // Tamanho ideal para leitura no celular sem quebrar linha
-    margin-top: 6.5rem;  // Dá espaço para os GIFs trabalharem   
-    
-    padding: 0 1rem; 
-    left: 7%;  
-  }
+   @include responsive(mobile) {
+    order: -1; 
+    margin-top: -2rem;
+   font-size: 0.9rem; 
+ }
 
-  &:hover {
+ &:hover {
     color: #ffffff;
     text-shadow: 0 0 0.5rem rgba(255, 255, 255, 0.8);
   }
@@ -271,4 +223,42 @@
   &:hover::after {
     width: 100%;
   }
+}
+
+// --- CARDS ---
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  width: 90%;
+  max-width: 950px;
+  margin: 5rem auto;
+  z-index: 25;
+
+  @include responsive(tablet) { 
+    grid-template-columns: 1fr;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  @include responsive(mobile) {     
+      margin: 3rem auto;
+      gap: 1.5rem;}    
+}
+
+// --- ANIMAÇÕES MANTIDAS ---
+@keyframes moveBall {
+  0% { left: 110%; transform: rotate(0deg); }
+  100% { left: -20%; transform: rotate(-360deg); }
+}
+
+@keyframes moveLines {
+  0% { transform: translateX(-100%); opacity: 0; }
+  10%, 90% { opacity: 0.7; }
+  100% { transform: translateX(100%); opacity: 0; }
+}
+
+@keyframes twinkle {
+  0% { opacity: 0.4; transform: scale(0.95); }
+  100% { opacity: 1; transform: scale(1); }
 }
