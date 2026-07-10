@@ -38,7 +38,7 @@ const Ranking = ({ userId }) => {
     teamsData, slots, setSlots, sortedRanking, topScore, availableAvatars,
     activeSelection, setActiveSelection, editingTeamId, setEditingTeamId,
     championBounce, dragOverSlot, setDragOverSlot,
-    calculateTotal, handleUpdateRule, generateAutoScores, executeMove, handleDragStart, handleDrop
+    calculateTotal, handleUpdateRule, generateAutoScores, executeMove, handleDragStart, handleDrop, resetScores
   } = useRanking(userId, initialTeams, prizeItems);
 
   const teamToEdit = teamsData.find(t => t.id === editingTeamId);
@@ -51,15 +51,20 @@ const Ranking = ({ userId }) => {
 
   return (
     <main className="ranking-page" onContextMenu={(e) => e.preventDefault()}>
-      <section className="ranking-hero">
-        <p className="ranking-kicker">WORLD CODE CUP • RANKING AO VIVO</p>
-        <h1 className="neon-text-golden-ranking">Pódio das Seleções</h1>
-        <p className="subtitle-text">Gerencie a pontuação e posicione as seleções conforme o desempenho.</p>
-        <div className="hero-actions">
-          <button className="btn-auto-score" onClick={generateAutoScores}>✨ Gerar Scores</button>
-          <button className="btn-reset-board" onClick={() => { setSlots({ first: null, second: null, third: null, firstPrize: null, secondPrize: null, thirdPrize: null }); }}>Limpar Pódio</button>
-        </div>
-      </section>
+     <section className="ranking-hero">
+  <p className="ranking-kicker">WORLD CODE CUP • RANKING AO VIVO</p>
+  <h1 className="neon-text-golden-ranking">Pódio das Seleções</h1>
+  <p className="subtitle-text">Gerencie a pontuação e posicione as seleções conforme o desempenho.</p>
+  
+  <div className="hero-actions">
+    <button className="btn-auto-score" onClick={generateAutoScores}>✨ Gerar Scores</button>
+    
+    {/* NOVO BOTÃO AQUI */}
+    <button className="btn-reset-scores" onClick={resetScores}>🔄 Resetar Scores</button>
+    
+    <button className="btn-reset-board" onClick={() => { setSlots({ first: null, second: null, third: null, firstPrize: null, secondPrize: null, thirdPrize: null }); }}>Limpar Pódio</button>
+  </div>
+</section>
 
       <section className="ranking-stage">
         <div className="ranking-stage__layout">

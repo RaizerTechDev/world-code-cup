@@ -347,6 +347,17 @@
   }
 }
 
+.btn-reset-scores {
+  background: rgba($gold-glow, 0.1);
+  color: $gold-glow;
+  border-color: rgba($gold-glow, 0.3) !important;
+
+  &:hover {
+    background: rgba($gold-glow, 0.2);
+    transform: translateY(-2px);
+  }
+}
+
 .instruction-text {
   font-size: 0.7rem;
   color: rgba($neon-blue, 0.6);
