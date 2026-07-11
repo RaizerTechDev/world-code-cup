@@ -45,7 +45,7 @@ const Header = () => {
           <nav className={`header__nav ${menuOpen ? 'header__nav--open' : ''}`}>
             <ul>
               <li><button onClick={() => navigateWithKick('/')} className="nav-link-btn">Home</button></li>
-              <li><button onClick={() => navigateWithKick('/ranking')} className="nav-link-btn">Ranking</button></li>
+              <li><button onClick={() => navigateWithKick('/ranking')} className="nav-link-btn">Pódio</button></li>
               <li><button onClick={() => navigateWithKick('/regulamento')} className="nav-link-btn">Regras</button></li>
             </ul>
           </nav>

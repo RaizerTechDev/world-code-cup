@@ -41,8 +41,11 @@ const Home = () => {
           </div>
 
           <div onClick={() => handleNavigation('/ranking')} style={{ cursor: 'pointer' }}>
-            <Card title="Ranking" description="Acompanhe a pontuação." />
-          </div>
+  <Card 
+    title="Pódio Interativo" 
+    description="Defina os campeões e ajuste o desempenho das seleções." 
+  />
+</div>
         </div>
       </div>
     </section>
