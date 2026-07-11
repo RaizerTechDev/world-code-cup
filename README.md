@@ -1,7 +1,3 @@
-Aqui está o seu **README.md** completo e refatorado. Ele foi atualizado para refletir todas as mudanças técnicas avançadas que fizemos, focando no valor que o projeto entrega como um case de engenharia de software e UX.
-
----
-
 # World Code Cup! ⚽💻
 
 ![Banner](https://capsule-render.vercel.app/api?type=waving&color=0:0f4c5c,100:1b9aaa&height=200&section=header&text=World%20Code%20Cup&fontSize=38&fontColor=ffffff&animation=fadeIn&fontAlignY=35&desc=Frontend%20Case%20%7C%20Interactive%20Gamified%20Ranking&descAlignY=55&descSize=16)
