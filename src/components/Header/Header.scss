@@ -1,8 +1,9 @@
 @use '../../styles/variables.scss' as *;
 
 .header {
-  background: rgba(0, 10, 15, 0.85);
-  backdrop-filter: blur(12px); 
+  // Estado normal (transparente com blur)
+  background: rgba(0, 10, 15, 0.8);
+  backdrop-filter: blur(20px); 
   -webkit-backdrop-filter: blur(12px);
   
   color: #80d8ff;  
@@ -10,15 +11,16 @@
   width: 100%;
   top: 0;
   left: 0;
-  z-index: 1000; // Aumentado para garantir que fique sobre tudo
+  z-index: 1000;
   border-bottom: 0.2rem solid $neon-blue; 
   box-shadow: 0 0.4rem 2rem rgba(0, 229, 255, 0.15);
-  transition: background 0.3s ease;
+  transition: background-color 0.3s ease; // Transição suave para o estado aberto
 
-  // Quando o menu mobile está aberto, removemos a transparência para não ver a Home atrás
+  // QUANDO O MENU ESTÁ ABERTO: Fundo 100% sólido (Preto azulado)
   &--open {
-    background: rgba(5, 5, 5, 0.98) !important;
+    background-color: #050a0f !important; // Cor sólida que bloqueia as estrelas
     backdrop-filter: none;
+    box-shadow: none; // Remove a sombra da barra para fundir com o nav
   }
 
   .header__container {
@@ -29,7 +31,7 @@
     justify-content: space-between;
     align-items: center;
     position: relative;
-    z-index: 1001;
+    z-index: 1001; // Garante que logo e botões fiquem acima de tudo
   }
 
   .audio-control {
@@ -46,13 +48,11 @@
     &:hover {
       background: $neon-blue;
       color: #000;
-      box-shadow: 0 0 1.2rem rgba(0, 229, 255, 0.4);
     }
 
     &.playing {
       border-color: $white-line;
       color: $neon-golden;
-      &:hover { background: $white-line; color: #000; }
     }
 
     @include responsive(mobile) {
@@ -68,17 +68,15 @@
     text-shadow: 0 0 0.8rem $neon-blue;
     span { color: $neon-blue; }
     cursor: pointer;
+    transition: transform 0.2s;
 
-    // Efeito de brilho ao passar o mouse
-  &:hover, &:focus {
-    color: $cyber-blue-glow;
-    text-shadow: 0 0 1rem $white-line;
-    outline: none;
-  }
+    &:hover {
+      color: $cyber-blue-glow;
+      transform: scale(1.05);
+    }
   }
 
   .header__nav {
-    
     ul {
       display: flex;
       gap: 2.5rem;
@@ -86,28 +84,29 @@
     }
 
     @include responsive(tablet) {
-      position: fixed; // Mudado para fixed
-      top: 4.5rem; // Altura aproximada do seu header bar
+      position: fixed; 
+      top: 4.5rem; // Altura da barra superior
       left: 0;
       width: 100%;
-      height: 0; // Começa fechado
-      background: rgba(5, 5, 5, 0.98); // Quase sólido
+      height: 0; 
+      background-color: #050a0f; // MESMA COR SÓLIDA DO HEADER--OPEN
       overflow: hidden;
       transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       display: flex;
       justify-content: center;
-      align-items: flex-start;      
+      align-items: flex-start;
+      z-index: 999;
 
       &--open {
-        height:40vh; 
-         border-bottom: 0.2rem solid $neon-blue;
+        height: 100vh; // Cobre toda a tela
+        border-top: 1px solid rgba(255,255,255,0.05); // Divisória sutil
       }
 
       ul {
         flex-direction: column;
         align-items: center;
         padding: 4rem 0;
-        gap: 2rem;
+        gap: 2.5rem;
         width: 100%;
       }
     }
@@ -117,21 +116,21 @@
     background: none;
     border: none;
     color: $neon-blue;
-    font-size: 1rem;
-    font-weight: 600;
+    font-size: 1.2rem;
+    font-weight: 700;
     cursor: pointer;
     padding: 1rem;
     transition: all 0.3s ease;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
 
     &:hover {
       color: #ffffff;
-      text-shadow: 0 0 1rem $neon-blue;
+      text-shadow: 0 0 1.5rem $neon-blue;
     }
 
     @include responsive(tablet) {
-      font-size: 1rem; // Links maiores no mobile
+      font-size: 1.2rem; 
     }
   }
 

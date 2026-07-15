@@ -21,7 +21,7 @@ const Header = () => {
     <>
       {showKick && <KickTransition onEnd={handleTransitionEnd} />}
       
-      {/* Adicionada a classe header--open quando o menu está ativo */}
+      {/* A classe header--open garante que a barra do topo fique sólida */}
       <header className={`header ${menuOpen ? 'header--open' : ''}`}>
         <div className="header__container">
           <button className="header__logo-btn" onClick={() => navigateWithKick('/')}>
@@ -44,6 +44,7 @@ const Header = () => {
             <span className="bar"></span>
           </button>
 
+          {/* O Nav mobile agora cobre 100% da visão abaixo da barra */}
           <nav className={`header__nav ${menuOpen ? 'header__nav--open' : ''}`}>
             <ul>
               <li><button onClick={() => navigateWithKick('/')} className="nav-link-btn">Home</button></li>
