@@ -1,8 +1,7 @@
-// src/components/Header/Header.scss
 @use '../../styles/variables.scss' as *;
 
 .header {
-  background: linear-gradient(0deg, rgba(0, 13, 15, 0.95) 0%, rgba(0, 30, 45, 0.8) 100%);
+  background: rgba(0, 10, 15, 0.85);
   backdrop-filter: blur(12px); 
   -webkit-backdrop-filter: blur(12px);
   
@@ -11,201 +10,158 @@
   width: 100%;
   top: 0;
   left: 0;
-  z-index: 100;
-  
-  // 🔧 Borda neon com sombra brilhante para destacar o topo do campo
+  z-index: 1000; // Aumentado para garantir que fique sobre tudo
   border-bottom: 0.2rem solid $neon-blue; 
   box-shadow: 0 0.4rem 2rem rgba(0, 229, 255, 0.15);
+  transition: background 0.3s ease;
 
+  // Quando o menu mobile está aberto, removemos a transparência para não ver a Home atrás
+  &--open {
+    background: rgba(5, 5, 5, 0.98) !important;
+    backdrop-filter: none;
+  }
 
   .header__container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 1.2rem 2rem; // Aumentado levemente para respirar
+    padding: 1.2rem 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: relative;
+    z-index: 1001;
   }
 
   .audio-control {
-  background: linear-gradient(0deg, rgba(0, 13, 15, 0.95) 0%, rgba(0, 30, 45, 0.8) 100%);
-  border: 0.1rem solid $neon-blue;   // Borda azul neon
-  color: $neon-blue;                  // Texto azul neon
-  padding: 0.5rem 0.5rem;
-  font-size: 0.8rem;
-  font-weight: bold;
-  border-radius: 0.4rem;
-  cursor: pointer;
-  
-  // Otimizado para usar 12px de desfoque de forma consistente
-  backdrop-filter: blur(12px); 
-  -webkit-backdrop-filter: blur(12px);
-  
-  transition: all 0.3s ease;
-  box-shadow: 0 0 1rem rgba(0, 229, 255, 0.2);
-  
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  // 💻 Desktop / Notebook
-  &:hover {
-    background: $neon-blue;
-    color: #000000;
-    box-shadow: 0 0 1.5rem rgba(0, 229, 255, 0.5);
-  }
-
-  // 🎼 Estado tocando música
-  &.playing {
-    border-color: $white-line;
-    color: $neon-golden;
+    background: rgba(0, 229, 255, 0.1);
+    border: 0.1rem solid $neon-blue;
+    color: $neon-blue;
+    padding: 0.5rem 0.8rem;
+    font-size: 0.75rem;
+    font-weight: bold;
+    border-radius: 0.4rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
 
     &:hover {
-      background: $white-line;
-      color: #000000;
-      box-shadow: 0 0 1.5rem rgba(255, 255, 255, 0.5);
-    }
-  }
-
-  // 📑 Tablet (Mantém tamanho e injeta o feedback de toque idêntico ao hover)
-  @include responsive(tablet) {
-    &:active {
       background: $neon-blue;
-      color: #000000;
-      box-shadow: 0 0 1.5rem rgba(0, 229, 255, 0.5);
+      color: #000;
+      box-shadow: 0 0 1.2rem rgba(0, 229, 255, 0.4);
     }
 
-    &.playing:active {
-      background: $white-line;
-      color: #000000;
-      box-shadow: 0 0 1.5rem rgba(255, 255, 255, 0.5);
-    }
-  }
-
-  // 📱 Mobile (Ajusta tamanho e injeta o feedback de toque idêntico ao hover)
-  @include responsive(mobile) {
-    padding: 0.4rem 0.8rem;
-    font-size: 0.6rem;
-
-    /* 🪄 O SEGREDO PRO MOBILE: O ':active' simula o clique físico do touch instantâneo 
-       aplicando a mesma virada de cor do notebook sem deixar o botão travado aceso. */
-    &:active {
-      background: $neon-blue;
-      color: #000000;
-      box-shadow: 0 0 1.5rem rgba(0, 229, 255, 0.5);
+    &.playing {
+      border-color: $white-line;
+      color: $neon-golden;
+      &:hover { background: $white-line; color: #000; }
     }
 
-    &.playing:active {
-      background: $white-line;
-      color: #000000;
-      box-shadow: 0 0 1.5rem rgba(255, 255, 255, 0.5);
+    @include responsive(mobile) {
+      padding: 0.4rem 0.6rem;
+      font-size: 0.6rem;
     }
   }
-}
+
   .header__logo {
     color: #ffffff;
-    font-size: 1.4rem;
+    font-size: 1.6rem;
     font-weight: 800;
-    text-decoration: none;
     text-shadow: 0 0 0.8rem $neon-blue;
     span { color: $neon-blue; }
     cursor: pointer;
 
-     // Efeito de brilho ao passar o mouse
-      &:hover, &:focus {
-        color: $cyber-blue-glow;
-        text-shadow: 0 0 1rem $white-line;
-        outline: none;
-      }
+    // Efeito de brilho ao passar o mouse
+  &:hover, &:focus {
+    color: $cyber-blue-glow;
+    text-shadow: 0 0 1rem $white-line;
+    outline: none;
+  }
   }
 
-  .header__nav ul {
-    display: flex;
-    gap: 2.5rem;
-    list-style: none;
+  .header__nav {
+    
+    ul {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;      
+    }
 
-    li a {
-      color: $neon-blue;
-      font-size: 1.2rem;
-      font-weight: 600;
-      text-decoration: none;
-      transition: color 0.3s ease, text-shadow 0.3s ease;
+    @include responsive(tablet) {
+      position: fixed; // Mudado para fixed
+      top: 4.5rem; // Altura aproximada do seu header bar
+      left: 0;
+      width: 100%;
+      height: 0; // Começa fechado
+      background: rgba(5, 5, 5, 0.98); // Quase sólido
+      overflow: hidden;
+      transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;      
 
-      // Efeito de brilho ao passar o mouse
-      &:hover, &:focus {
-        color: #ffffff;
-        text-shadow: 0 0 1rem #ffffff;
-        outline: none;
+      &--open {
+        height:40vh; 
+         border-bottom: 0.2rem solid $neon-blue;
+      }
+
+      ul {
+        flex-direction: column;
+        align-items: center;
+        padding: 4rem 0;
+        gap: 2rem;
+        width: 100%;
       }
     }
   }
-    // Garantindo que o header fique acima de outros elementos, especialmente o campo
+
+  .nav-link-btn {
+    background: none;
+    border: none;
+    color: $neon-blue;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 1rem;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+
+    &:hover {
+      color: #ffffff;
+      text-shadow: 0 0 1rem $neon-blue;
+    }
+
+    @include responsive(tablet) {
+      font-size: 1rem; // Links maiores no mobile
+    }
+  }
+
   .header__toggle {
     display: none;
     flex-direction: column;
     justify-content: space-between;
     width: 2rem;
-    height: 1.5rem;
+    height: 1.4rem;
     background: transparent;
     border: none;
     cursor: pointer;
+    z-index: 1100;
 
     .bar {
       width: 100%;
-      height: 0.2rem;
+      height: 3px;
       background-color: $neon-blue;
       transition: all 0.3s ease;
+      border-radius: 2px;
     }
 
-    // Animação do toggle para transformar as barras em um "X"
     &.is-active {
-      .bar:nth-child(1) { transform: translateY(0.65rem) rotate(45deg); }
+      .bar:nth-child(1) { transform: translateY(0.55rem) rotate(45deg); }
       .bar:nth-child(2) { opacity: 0; }
-      .bar:nth-child(3) { transform: translateY(-0.65rem) rotate(-45deg); }
+      .bar:nth-child(3) { transform: translateY(-0.55rem) rotate(-45deg); }
+    }
+
+    @include responsive(tablet) {
+      display: flex;
     }
   }
-
-  @include responsive(tablet) {
-    .header__toggle { display: flex; }
-
-    .header__nav {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      width: 100%;
-      // Fundo mobile acompanhando o padrão futurista
-      background: rgba(10, 10, 10, 0.98);
-      border-bottom: 0.2rem solid $neon-blue;
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.4s ease-in-out;
-
-      &--open { max-height: 20rem; }
-
-      ul {
-        flex-direction: column;
-        align-items: center;
-        padding: 2rem 0;
-        gap: 1.5rem;
-      }
-    }
-  }
-  // No seu Header.scss, certifique-se de estilizar os novos botões de navegação
-.nav-link-btn {
-  background: none;
-  border: none;
-  color: inherit;       /* Herda a cor branca/neon dos seus antigos links */
-  font-family: inherit;
-  font-size: inherit;   /* Mantém o tamanho do texto original */
-  font-weight: inherit;
-  cursor: pointer;
-  padding: 0.5rem 1rem;
-  width: 100%;
-  text-align: left;
-  transition: color 0.3s ease;
-
-  &:hover {
-    color: #00bcff;    /* Cor de destaque quando passa o mouse */
-  }
-}
 }

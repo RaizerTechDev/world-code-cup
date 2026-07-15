@@ -14,7 +14,7 @@
     url('../../assets/ranking/stadium-ranking.webp') center/cover no-repeat fixed;
 
   @include responsive(mobile) {
-    padding: 1.5rem 1rem 3rem;
+    padding: 6.5rem 3rem;
   }
 }
 
@@ -24,6 +24,13 @@
   text-align: center;
   margin-bottom: 2rem;
 
+  .ranking-kicker {
+
+   @include responsive(mobile) {
+      font-size: 0.85rem;    
+    }
+  }
+
   .neon-text-golden-ranking {
     color: $gold-glow;
     font-weight: bold;
@@ -32,7 +39,7 @@
 
     @include responsive(mobile) {
       font-size: 1.8rem;
-      margin-top: 5rem;
+      margin-top: 0.85rem;
     }
   }
 
@@ -44,7 +51,7 @@
 
     @include responsive(mobile) {
       font-size: 0.85rem;
-      padding: 0 1rem;
+      padding: 0.5rem 1rem;
     }
   }
 }

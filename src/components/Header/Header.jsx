@@ -21,7 +21,8 @@ const Header = () => {
     <>
       {showKick && <KickTransition onEnd={handleTransitionEnd} />}
       
-      <header className="header">
+      {/* Adicionada a classe header--open quando o menu está ativo */}
+      <header className={`header ${menuOpen ? 'header--open' : ''}`}>
         <div className="header__container">
           <button className="header__logo-btn" onClick={() => navigateWithKick('/')}>
             <span className="header__logo">WCC<span>.</span></span>
@@ -36,6 +37,7 @@ const Header = () => {
           <button
             className={`header__toggle ${menuOpen ? 'is-active' : ''}`}
             onClick={() => setMenuOpen(!menuOpen)}
+            aria-label="Toggle menu"
           >
             <span className="bar"></span>
             <span className="bar"></span>
