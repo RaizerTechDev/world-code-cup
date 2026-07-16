@@ -1,5 +1,21 @@
 @use '../../styles/variables.scss' as *;
 
+.header__backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4); // Escurece levemente a Home
+  z-index: 950; // Abaixo do header mas acima da Home
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  backdrop-filter: blur(2px);
+
+  &--visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
 .header {
   // Estado normal (transparente com blur)
   background: $bg-gradient-center;
@@ -87,7 +103,7 @@
       position: fixed; 
       top: 4.5rem; // Altura da barra superior
       left: 0;
-      width: 100%;
+      width: 80%;
       height: 0; 
       background-color: #050a0f; // MESMA COR SÓLIDA DO HEADER--OPEN
       overflow: hidden;
@@ -146,17 +162,11 @@
     z-index: 1100;
 
     .bar {
-      width: 100%;
+      width: 70%;
       height: 3px;
       background-color: $neon-blue;
       transition: all 0.3s ease;
       border-radius: 2px;
-    }
-
-    &.is-active {
-      .bar:nth-child(1) { transform: translateY(0.55rem) rotate(45deg); }
-      .bar:nth-child(2) { opacity: 0; }
-      .bar:nth-child(3) { transform: translateY(-0.55rem) rotate(-45deg); }
     }
 
     @include responsive(tablet) {

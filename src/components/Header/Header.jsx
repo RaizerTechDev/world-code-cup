@@ -20,8 +20,12 @@ const Header = () => {
   return (
     <>
       {showKick && <KickTransition onEnd={handleTransitionEnd} />}
+
+      <div 
+        className={`header__backdrop ${menuOpen ? 'header__backdrop--visible' : ''}`}
+        onClick={() => setMenuOpen(false)}
+      />
       
-      {/* A classe header--open garante que a barra do topo fique sólida */}
       <header className={`header ${menuOpen ? 'header--open' : ''}`}>
         <div className="header__container">
           <button className="header__logo-btn" onClick={() => navigateWithKick('/')}>
@@ -34,17 +38,16 @@ const Header = () => {
             {isPlaying ? "🔊 MUTAR" : "🔇 OUVIR TRILHA"}
           </button>
 
-          <button
-            className={`header__toggle ${menuOpen ? 'is-active' : ''}`}
+        <button
+            className="header__toggle"
             onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Toggle menu"
+            aria-label="Abrir menu"
           >
             <span className="bar"></span>
             <span className="bar"></span>
             <span className="bar"></span>
           </button>
-
-          {/* O Nav mobile agora cobre 100% da visão abaixo da barra */}
+   
           <nav className={`header__nav ${menuOpen ? 'header__nav--open' : ''}`}>
             <ul>
               <li><button onClick={() => navigateWithKick('/')} className="nav-link-btn">Home</button></li>

@@ -9,6 +9,28 @@ export const useHeader = () => {
   // Importamos a lógica do chute (sem intro ativa para o Header)
   const { showKick, startKick, handleTransitionEnd } = useKick(false);
 
+  // --- LÓGICA PARA CONGELAR O SCROLL ---
+  useEffect(() => {
+    if (menuOpen) {
+      // Quando o menu abre, trava o scroll
+      document.body.style.overflow = 'hidden';
+      // No iOS Safari, as vezes é necessário travar o toque também:
+      document.body.style.touchAction = 'none'; 
+    } else {
+      // Quando o menu fecha, libera o scroll
+      document.body.style.overflow = 'unset';
+      document.body.style.touchAction = 'auto';
+    }
+
+    // Função de limpeza: garante que se o componente for desmontado, 
+    // a página não fique travada para sempre.
+    return () => {
+      document.body.style.overflow = 'unset';
+      document.body.style.touchAction = 'auto';
+    };
+  }, [menuOpen]);
+
+  // --- CONTROLE DE ÁUDIO ---
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.play()
@@ -24,8 +46,11 @@ export const useHeader = () => {
     }
   };
 
+  // --- NAVEGAÇÃO ---
   const navigateWithKick = (path) => {
-    setMenuOpen(false); // Fecha menu mobile ao clicar
+    // Ao clicar em um link, liberamos o scroll antes de mudar de página
+    document.body.style.overflow = 'unset';
+    setMenuOpen(false); 
     startKick(path);
   };
 
