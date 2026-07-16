@@ -2,9 +2,9 @@
 
 .header {
   // Estado normal (transparente com blur)
-  background: rgba(0, 10, 15, 0.8);
-  backdrop-filter: blur(20px); 
-  -webkit-backdrop-filter: blur(12px);
+  background: $bg-gradient-center;
+  backdrop-filter: blur(10px); 
+  -webkit-backdrop-filter: blur(10px);
   
   color: #80d8ff;  
   position: fixed;
