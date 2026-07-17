@@ -103,7 +103,7 @@
       position: fixed;
       top: 0; // Começa do topo absoluto para cobrir o botão
       right: 0; // Fixado na direita
-      width: 80%;
+      width: 50%;
       height: 100vh;
       background-color: #050a0f;
       z-index: 1200; // Acima da barra do header
@@ -130,6 +130,9 @@
         padding: 0;
       }
     }
+      @include responsive(mobile) {
+        width: 71%;      
+      }
   }  
 
   .nav-link-btn {
