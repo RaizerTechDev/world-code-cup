@@ -20,12 +20,13 @@ const Header = () => {
   return (
     <>
       {showKick && <KickTransition onEnd={handleTransitionEnd} />}
-
+      
+      {/* Camada que escurece os 20% da esquerda e fecha o menu ao clicar */}
       <div 
         className={`header__backdrop ${menuOpen ? 'header__backdrop--visible' : ''}`}
         onClick={() => setMenuOpen(false)}
       />
-      
+
       <header className={`header ${menuOpen ? 'header--open' : ''}`}>
         <div className="header__container">
           <button className="header__logo-btn" onClick={() => navigateWithKick('/')}>
@@ -38,7 +39,7 @@ const Header = () => {
             {isPlaying ? "🔊 MUTAR" : "🔇 OUVIR TRILHA"}
           </button>
 
-        <button
+          <button
             className="header__toggle"
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Abrir menu"
@@ -47,7 +48,7 @@ const Header = () => {
             <span className="bar"></span>
             <span className="bar"></span>
           </button>
-   
+
           <nav className={`header__nav ${menuOpen ? 'header__nav--open' : ''}`}>
             <ul>
               <li><button onClick={() => navigateWithKick('/')} className="nav-link-btn">Home</button></li>

@@ -100,33 +100,37 @@
     }
 
     @include responsive(tablet) {
-      position: fixed; 
-      top: 4.5rem; // Altura da barra superior
-      left: 0;
+      position: fixed;
+      top: 0; // Começa do topo absoluto para cobrir o botão
+      right: 0; // Fixado na direita
       width: 80%;
-      height: 0; 
-      background-color: #050a0f; // MESMA COR SÓLIDA DO HEADER--OPEN
-      overflow: hidden;
-      transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      height: 100vh;
+      background-color: #050a0f;
+      z-index: 1200; // Acima da barra do header
+      
+      // Desliza da direita para a esquerda
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      
       display: flex;
+      flex-direction: column;
       justify-content: center;
-      align-items: flex-start;
-      z-index: 999;
+      box-shadow: -10px 0 40px rgba(0,0,0,0.8);
+      border-left: 2px solid $neon-blue; // Borda neon na lateral do menu
 
       &--open {
-        height: 100vh; // Cobre toda a tela
-        border-top: 1px solid rgba(255,255,255,0.05); // Divisória sutil
+        transform: translateX(0);
       }
 
       ul {
         flex-direction: column;
         align-items: center;
-        padding: 4rem 0;
-        gap: 2.5rem;
-        width: 100%;
+        gap: 3rem;
+        list-style: none;
+        padding: 0;
       }
     }
-  }
+  }  
 
   .nav-link-btn {
     background: none;
@@ -146,6 +150,10 @@
     }
 
     @include responsive(tablet) {
+      font-size: 1.5rem; 
+    }
+
+     @include responsive(mobile) {
       font-size: 1.2rem; 
     }
   }
