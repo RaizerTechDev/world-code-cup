@@ -28,7 +28,7 @@ const initialTeams = [
 ].map(t => ({ ...t, rules: Array(5).fill(0) }));
 
 const prizeItems = [
-  { id: 'trophy', label: 'Troféu', webm: trophy, type: 'trophy' },
+  { id: 'trophy', label: 'Ouro', webm: trophy, type: 'trophy' },
   { id: 'silver-trophy', label: 'Prata', webm: silverTrophy, type: 'silver-trophy' },
   { id: 'bronze-trophy', label: 'Bronze', webm: bronzeTrophy, type: 'bronze-trophy' },
 ];
@@ -54,7 +54,7 @@ const Ranking = ({ userId }) => {
      <section className="ranking-hero">
   <p className="ranking-kicker">WORLD CODE CUP • RANKING AO VIVO</p>
   <h1 className="neon-text-golden-ranking">Pódio das Seleções</h1>
-  <p className="subtitle-text">Gerencie a pontuação e posicione as seleções conforme o desempenho.</p>
+  <p className="subtitle-text">Gerencie a pontuação e posicione as seleções e premiação conforme o desempenho.</p>
   
   <div className="hero-actions">
     <button className="btn-auto-score" onClick={generateAutoScores}>✨ Gerar Scores</button>
